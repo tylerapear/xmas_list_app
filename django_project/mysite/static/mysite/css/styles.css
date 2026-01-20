@@ -17,3 +17,7 @@ body {
     border-bottom-width: 1px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
+
+.title-section {
+    margin-top: 20px;
+}
