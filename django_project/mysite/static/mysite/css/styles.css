@@ -1,10 +1,19 @@
 :root {
     --bs-primary: #ee0000;
-    --bs-background-primary: #eeeeee;
-    --bs-background-secondary: #eeeeee;
+    --bs-background-primary: #333333;
+    --bs-background-secondary: #333333;
+    --bs-border-primary: #555555;
+}
+
+body {
+    background-color: var(--bs-background-primary);
+    color: white;
 }
 
 .navbar {
-    background-color: #eeeeee;
-    padding-bottom: 1000px
+    background-color: var(--bs-background-primary);
+    border-color: var(--bs-border-primary);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
