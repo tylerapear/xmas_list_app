@@ -31,7 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'xmas_lists.apps.XmasListsConfig',
+    'mysite',
+    'xmas_lists',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -1,0 +1,10 @@
+:root {
+    --bs-primary: #ee0000;
+    --bs-background-primary: #eeeeee;
+    --bs-background-secondary: #eeeeee;
+}
+
+.navbar {
+    background-color: #eeeeee;
+    padding-bottom: 1000px
+}
