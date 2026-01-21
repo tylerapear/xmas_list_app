@@ -1,7 +1,7 @@
 :root {
     --bs-primary: #ee0000;
     --bs-background-primary: #333333;
-    --bs-background-secondary: #333333;
+    --bs-background-secondary: #444444;
     --bs-border-primary: #555555;
 }
 
@@ -20,4 +20,10 @@ body {
 
 .title-section {
     margin-top: 20px;
+}
+
+.other-side {
+    background-color: var(--bs-background-secondary);
+    border-left: 1px solid var(--bs-border-primary);
+    padding-left: 15px;
 }
