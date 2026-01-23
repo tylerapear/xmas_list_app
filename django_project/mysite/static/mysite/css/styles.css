@@ -3,6 +3,7 @@
     --bs-background-primary: #333333;
     --bs-background-secondary: #444444;
     --bs-border-primary: #555555;
+    --bs-button-primary: #666666;
 }
 
 body {
@@ -16,7 +17,9 @@ body {
     border-bottom-style: solid;
     border-bottom-width: 1px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    min-height: 60px;
     height: 10vh;
+    max-height: 80px;
     padding: 0px 20px;
 }
 
@@ -24,8 +27,23 @@ body {
     margin-top: 20px;
 }
 
+.main-content {
+    height: calc(100vh - 10vh)
+}
+
 .other-side {
     background-color: var(--bs-background-secondary);
     border-left: 1px solid var(--bs-border-primary);
     padding-left: 15px;
+}
+
+.btn {
+    background-color: var(--bs-button-primary);
+    box-shadow: 0 1px 10px 5px rgba(71, 71, 71, 0.5);
+    margin: 10px 0px;
+}
+
+.xmas-list-list {
+    list-style-type: none;
+    width: 40vw
 }

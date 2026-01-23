@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="{% static 'mysite/css/styles.css' %}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="min-vh-100">
 
     {% block navbar %}
     <nav class="navbar">
@@ -22,14 +22,14 @@
     {% endblock navbar %}
 
     {% block main_content %}
-    <div class="container-fluid min-vh-100 d-flex flex-column">
+    <div class="container-fluid d-flex flex-column main-content">
         <div class="row flex-grow-1">
-            <div class="col-9">
+            <div class="container col-9">
                 {% block feature %}{% endblock feature %}
             </div>
-            <div class="col-3 other-side">
+            <div class="col-3 other-side d-flex flex-column">
                 {% block contents %}
-                    <div class="container title-section">
+                    <div class="container title-section flex-grow-1">
                         <div class="h1">Site Contents</div>
                     </div>
                 {% endblock contents %}

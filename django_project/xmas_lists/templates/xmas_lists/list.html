@@ -1,0 +1,20 @@
+{% extends "mysite/base.html" %}
+
+{% block feature%}
+
+<div class="container">
+    <h1 class="title-section">Add an item to {{ list.user }}'s List:</h1>
+    <form action="{% url 'xmas_lists:create' list.id %}" method="post">
+        {% csrf_token %}
+        <fieldset>
+            <label for="">Item Title</label><br>
+            <input type="text" name="title" value="" required>
+            <br>
+            <label for="">Item URL</label><br>
+            <input type="url" name="url" value="" required>
+        </fieldset>
+        <input type="submit" value="Create" class="btn">
+    </form>
+</div>
+
+{% endblock feature%}

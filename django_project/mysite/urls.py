@@ -19,6 +19,7 @@ from django.urls import include, path
 
 from . import views
 
+app_name = "mysite"
 urlpatterns = [
     path("", views.index, name="index"),
     path("lists/", include("xmas_lists.urls")),
