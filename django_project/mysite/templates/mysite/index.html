@@ -3,7 +3,7 @@
 {% block feature %}
 <div class="container d-flex flex-column feature-section">
     <div class="flex-grow-1">
-        <h1 class="title-section">Welcome to the Xmas List App!</h1>
+        <h1 class="title-section">Welcome to the Xmas List App, {{ user.username }}!</h1>
         <a href="{% url 'xmas_lists:index' %}" class="btn btn-lg">View My Lists</a>
     </div>
 </div>

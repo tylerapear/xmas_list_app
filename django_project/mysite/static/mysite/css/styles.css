@@ -31,6 +31,10 @@ body {
     height: calc(100vh - 10vh)
 }
 
+.feature-section {
+    height: calc(100vh - 10vh)
+}
+
 .other-side {
     background-color: var(--bs-background-secondary);
     border-left: 1px solid var(--bs-border-primary);
@@ -46,4 +50,63 @@ body {
 .xmas-list-list {
     list-style-type: none;
     width: 40vw
+}
+
+.login-title {
+    margin-top: 100px;
+    margin-bottom: 40px;
+}
+
+.login-form {
+  width: 100%;
+  height: 100%;
+}
+
+.nav-link {
+    background-color: var(--bs-background-secondary);
+}
+
+/* Remove margin between tabs and tab content */
+.nav-tabs {
+    margin-bottom: 0 !important; /* Remove the default margin below the tabs */
+    border-bottom: none; /* Remove the bottom border of the tabs */
+}
+
+/* Remove padding from the nav-link elements */
+.nav-tabs .nav-link {
+    margin: 0 !important; /* Remove any margin from the nav links */
+    padding: 0.5rem 1rem; /* Optional: Adjust padding for better spacing */
+}
+
+/* Ensure only the active tab is visible */
+.tab-pane {
+    position: absolute; /* Position the forms absolutely within the tab-content container */
+    padding: 0;
+    margin: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none; /* Hide inactive tabs completely */
+    align-items: center;
+    justify-content: center;
+    z-index: 0; /* Ensure inactive tabs are behind the active tab */
+}
+
+.tab-pane.show.active {
+    display: flex; /* Show the active tab */
+    z-index: 1; /* Bring the active tab to the front */
+}
+
+/* Ensure the tab content container has a fixed height */
+.tab-content {
+    position: relative;
+    padding: 0;
+    margin: 0;
+    height: 400px; /* Set a fixed height for the tab content */
+    margin-top: -1px; /* Remove the gap between tabs and forms */
+    background-color: var(--bs-background-primary); /* Optional: Set background color for the tab content */
+    border: 1px solid var(--bs-border-primary); /* Optional: Add a border to the tab content */
+    border-top: none; /* Remove the top border to connect tabs and forms seamlessly */
+    border-radius: 0 0 0.5rem 0.5rem; /* Optional: Add rounded corners to the bottom of the tab content */
 }
