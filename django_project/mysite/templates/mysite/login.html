@@ -28,8 +28,8 @@
                         {% csrf_token %}
                         <fieldset>
                             <legend><h1>Login</h1></legend>
-                            <label for="login-username" class="form-label">Email</label>
-                            <input type="text" name="username" id="login-username" class="form-control"><br>
+                            <label for="login-email" class="form-label">Email</label>
+                            <input type="email" name="email" id="login-email" class="form-control"><br>
                             <label for="login-password" class="form-label">Password</label>
                             <input type="password" name="password" id="login-password" class="form-control"><br>
                         </fieldset>
@@ -44,8 +44,10 @@
                         {% csrf_token %}
                         <fieldset>
                             <legend><h1>Sign Up</h1></legend>
-                            <label for="signup-username" class="form-label">Email</label>
-                            <input type="text" name="username" id="signup-username" class="form-control"><br>
+                            <label for="signup-first-name" class="form-label">First Name</label>
+                            <input type="text" name="first-name" id="signup-first-name" class="form-control"><br>
+                            <label for="signup-email" class="form-label">Email</label>
+                            <input type="email" name="email" id="signup-email" class="form-control"><br>
                             <label for="signup-password" class="form-label">Password</label>
                             <input type="password" name="password" id="signup-password" class="form-control"><br>
                         </fieldset>
@@ -55,6 +57,16 @@
                 </div>
             </div>
         </div>
+
+        {% if messages %}
+        <div class="alert-messages">
+            {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{message.tags}}{% endif %}" role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
 
     </div>
 </div>
