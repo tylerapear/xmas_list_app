@@ -26,4 +26,4 @@ def create(request, list_id):
         url=item_url,
     )
     
-    return HttpResponseRedirect(reverse("index"))
+    return HttpResponseRedirect(reverse("xmas_lists:index"))

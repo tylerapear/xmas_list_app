@@ -4,21 +4,7 @@
 <div class="container d-flex flex-column feature-section">
     <div class="flex-grow-1">
         <h1 class="title-section">Welcome to the Xmas List App!</h1>
-
-        <ul class="xmas-list-list">
-            {% for list in user.list_set.all %}
-            <h3>{{ list.user.fullname }}'s List</h3>
-            <li class="list-group-item list-group-item-dark">
-                <ul class="xmas-list-list list-group mt-2">
-                    {% for item in list.listitem_set.all %}
-                    <li class="list-group-item">{{ item.title }}</li>
-                    {% endfor %}
-                </ul>
-            </li>
-            <li><a href="{% url 'xmas_lists:list' list.id %}" class="btn btn-lg">Add Item to List</a></li>
-            {% endfor %}
-        </ul>
-
+        <a href="{% url 'xmas_lists:index' %}" class="btn btn-lg">View My Lists</a>
     </div>
 </div>
 {% endblock feature %}
