@@ -4,7 +4,6 @@ from . import views
 
 app_name = "xmas_lists"
 urlpatterns = [
-    path("", views.index, name="index"),
-    path("list/<int:list_id>/", views.list, name="list"),
-    path("list/<int:list_id>/create", views.create, name="create")
+    path("list/", views.ListListView.as_view(), name="list-list"),
+    path("list/<int:pk>/", views.ListDetailView.as_view(), name="list-detail"),
 ]

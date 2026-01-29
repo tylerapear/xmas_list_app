@@ -1,0 +1,28 @@
+{% extends "mysite/base.html" %}
+
+{% block feature %}
+<div class="container d-flex flex-column feature-section">
+    <div class="flex-grow-1">
+        <h1 class="title-section">List List View</h1>
+
+        <ul class="xmas-list-list">
+            
+            {% if list_list %}
+
+                {% for list in list_list %}
+                <ul>
+                    <li><strong>List: </strong><a href="{% url 'xmas_lists:list-detail' list.id %}">{{ forloop.counter }}</a></li>
+                    <li><strong>Created: </strong>{{ list.created_at }}</li>
+                </ul>    
+                {% endfor %}
+
+            {% else %}
+                <h3>You haven't created any lists yet.</h3>
+
+            {% endif %}
+        
+        </ul>
+
+    </div>
+</div>
+{% endblock feature %}

@@ -16,7 +16,14 @@
     <nav class="navbar">
         <div class="container-fluid">
             <a class="navbar-brand" href="{% url 'index' %}">Xmas Lists</a>
-            <i class="fa-solid fa-bars"></i>
+            <div>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'logout' %}" class="login-link">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}?next={{ request.path }}" class="login-link">Login</a>
+                {% endif %}
+                <i class="fa-solid fa-bars"></i>
+            </div>
         </div>
     </nav>
     {% endblock navbar %}
@@ -28,11 +35,16 @@
                 {% block feature %}{% endblock feature %}
             </div>
             <div class="col-3 other-side d-flex flex-column">
-                {% block contents %}
+                {% block site_contents %}
                     <div class="container title-section flex-grow-1">
                         <div class="h1">Site Contents</div>
+                        <ul class="list-group">
+                            <li class="list-group-item bg-transparent border-0 p-0">
+                                <a href="{% url 'xmas_lists:list-list' %}">View My Lists</a>
+                            </li>
+                        </ul>
                     </div>
-                {% endblock contents %}
+                {% endblock site_contents %}
             </div>
         </div>
     </div>

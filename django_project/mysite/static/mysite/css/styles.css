@@ -23,6 +23,10 @@ body {
     padding: 0px 20px;
 }
 
+.login-link {
+    margin-right: 20px;
+}
+
 .title-section {
     margin-top: 20px;
 }

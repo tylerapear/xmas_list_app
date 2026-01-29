@@ -3,7 +3,7 @@
 {% block feature %}
 <div class="container d-flex flex-column feature-section">
     <div class="d-flex flex-column flex-grow-1 align-items-center">
-        <h1 class="login-title">Welcome to the Xmas List app!</h1>
+        <h1 class="login-title">Login or Sign Up</h1>
 
         <div class="w-100" style="max-width: 500px;">
             <!-- TABS -->
@@ -24,17 +24,20 @@
             <div class="tab-content w-100">
                 <!-- Login Tab -->
                 <div class="tab-pane fade show active d-flex flex-column align-items-center justify-content-center" id="login" role="tabpanel" aria-labelledby="login-tab">
-                    <form action="{% url 'login_user' %}" method="post" class="p-4 rounded shadow-sm bg-dark login-form w-100">
+                    <form action="{% url 'login' %}" method="post" class="p-4 rounded shadow-sm bg-dark login-form w-100">
                         {% csrf_token %}
                         <fieldset>
                             <legend><h1>Login</h1></legend>
-                            <label for="login-email" class="form-label">Email</label>
-                            <input type="email" name="email" id="login-email" class="form-control"><br>
-                            <label for="login-password" class="form-label">Password</label>
-                            <input type="password" name="password" id="login-password" class="form-control"><br>
+                            {{ form.username.label_tag }}
+                            <br>
+                            {{ form.username }}<br>
+                            {{ form.password.label_tag }}
+                            <br>
+                            {{ form.password }}<br>
                         </fieldset>
                         {% if message %}<p style="color: red"><strong>{{ message }}</strong></p>{% endif %}
-                        <input type="submit" class="btn w-100">
+                        <input type="submit" value="login" class="btn w-100">
+                        <input type="hidden" name="next" value="{{ next }}">
                     </form>
                 </div>
 
