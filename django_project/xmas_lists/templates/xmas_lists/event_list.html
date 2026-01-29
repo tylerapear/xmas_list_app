@@ -1,0 +1,29 @@
+{% extends "mysite/base.html" %}
+
+{% block feature %}
+<div class="container d-flex flex-column feature-section">
+    <div class="flex-grow-1">
+        <h1 class="title-section">Event Lists</h1>
+
+        <ul class="xmas-list-list">
+            
+            {% if event_list %}
+
+                {% for event in event_list %}
+                <hr/>
+                <ul>
+                    <li><strong>Event: </strong><a href="{% url 'xmas_lists:event-detail' event.id %}">{{ event.event_title }}</a></li>
+                    <li><strong>Date: </strong>{{ event.event_date }}</li>
+                </ul>    
+                {% endfor %}
+
+            {% else %}
+                <h3>There aren't any events.</h3>
+
+            {% endif %}
+        
+        </ul>
+
+    </div>
+</div>
+{% endblock feature %}

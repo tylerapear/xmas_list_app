@@ -11,13 +11,21 @@
 
                 <table class="table table-dark table-striped table-bordered rounded shadow-sm align-middle">
                     <tr>
-                        <td>Item</td>
-                        <td>URL</td>
+                        <th>Item</th>
+                        <th>Price</th>
+                        <th>Priority</th>
                     </tr>
                     {% for item in list.listitem_set.all %}
                     <tr>
-                        <td>{{ item.title }}</td>
-                        <td><a href="{{ item.url }}">{{ item.url }}</a></td>
+                        <td>
+                            {% if item.url %}
+                                <a href="{{ item.url }}">{{ item.title }}</a>
+                            {% else %}
+                                {{ item.title }}
+                            {% endif %}
+                        </td>
+                        <td>${{ item.price }}</td>
+                        <td>{{ item.get_priority_display }}</td>
                     </tr>    
                     {% endfor %}
                 </table>

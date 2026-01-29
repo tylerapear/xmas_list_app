@@ -64,7 +64,7 @@ class ListItem(models.Model):
         ordering = ["created_at"]
     
 class ListItemPurchased(models.Model):
-    list_item = models.ForeignKey(ListItem, unique=True, on_delete=models.RESTRICT)
+    list_item = models.OneToOneField(ListItem, unique=True, on_delete=models.RESTRICT)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     purchased_by = models.ForeignKey(User, on_delete=models.RESTRICT)
