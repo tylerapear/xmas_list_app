@@ -61,7 +61,7 @@ class ListItem(models.Model):
         return f'{self.title} for {self.list.user.first_name}'
     
     class Meta:
-        ordering = ["created_at"]
+        ordering = ["-priority", "price"]
     
 class ListItemPurchased(models.Model):
     list_item = models.OneToOneField(ListItem, unique=True, on_delete=models.RESTRICT)

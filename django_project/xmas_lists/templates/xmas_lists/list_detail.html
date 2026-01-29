@@ -3,7 +3,7 @@
 {% block feature %}
 <div class="container d-flex flex-column feature-section">
     <div class="flex-grow-1">
-        <h1 class="title-section">List Detail View</h1>
+        <h1 class="title-section">{{ list }}</h1>
 
         <ul class="xmas-list-list">
             
@@ -29,7 +29,9 @@
                     </tr>    
                     {% endfor %}
                 </table>
-
+                {% if is_owner %}
+                    <a href="">Manage List</a>
+                {% endif %}
             {% endif %}
         
         </ul>

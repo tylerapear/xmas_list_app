@@ -7,9 +7,6 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 
 from .models import Event, List, ListItem, ListItemPurchased
-
-class EventListView(LoginRequiredMixin, generic.ListView):
-    model = Event
     
 class EventDetailView(LoginRequiredMixin, generic.DetailView):
     model = Event
@@ -33,3 +30,13 @@ class ListListView(LoginRequiredMixin, generic.ListView):
     
 class ListDetailView(LoginRequiredMixin, generic.DetailView):
     model = List
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        list_obj = self.object
+        context['is_owner'] = (list_obj.user == self.request.user)
+        return context
+    
+    
+    
+    

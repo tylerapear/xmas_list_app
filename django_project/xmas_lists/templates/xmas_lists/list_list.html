@@ -3,21 +3,21 @@
 {% block feature %}
 <div class="container d-flex flex-column feature-section">
     <div class="flex-grow-1">
-        <h1 class="title-section">List List View</h1>
+        <h1 class="title-section">Upcoming Events</h1>
 
         <ul class="xmas-list-list">
             
             {% if list_list %}
 
                 {% for list in list_list %}
-                <ul>
-                    <li><strong>List: </strong><a href="{% url 'xmas_lists:list-detail' list.id %}">{{ forloop.counter }}</a></li>
-                    <li><strong>Created: </strong>{{ list.created_at }}</li>
-                </ul>    
+                <hr/>
+                    <strong>Event: </strong><a href="{% url 'xmas_lists:event-detail' list.event.id %}">{{ list.event.event_title }}</a><br>
+                    <strong>Date: </strong>{{ list.event.event_date }} <br>
+                    <a href="{% url 'xmas_lists:list-detail' list.id %}">Manage My List</a>  
                 {% endfor %}
 
             {% else %}
-                <h3>You haven't created any lists yet.</h3>
+                <h3>There aren't any events.</h3>
 
             {% endif %}
         
