@@ -61,6 +61,12 @@ class ListItem(models.Model):
         return f'{self.title} for {self.list.user.first_name}'
     
     class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=['title', 'list'],
+                name='unique_title_list_pair'
+            )
+        ]
         ordering = ["-priority", "price"]
     
 class ListItemPurchased(models.Model):

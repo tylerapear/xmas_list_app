@@ -24,13 +24,13 @@
                                 {{ item.title }}
                             {% endif %}
                         </td>
-                        <td>${{ item.price }}</td>
+                        <td>{% if item.price %}${% endif %}{{ item.price }}</td>
                         <td>{{ item.get_priority_display }}</td>
                     </tr>    
                     {% endfor %}
                 </table>
                 {% if is_owner %}
-                    <a href="">Manage List</a>
+                    <a href="{% url 'xmas_lists:list-item-create' list.id %}">Add Item to List</a>
                 {% endif %}
             {% endif %}
         
