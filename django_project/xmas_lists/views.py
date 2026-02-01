@@ -37,11 +37,22 @@ class ListDetailView(LoginRequiredMixin, generic.DetailView):
         context = super().get_context_data(**kwargs)
         list_obj = self.object
         context['is_owner'] = (list_obj.user == self.request.user)
+        
+        annotated_items = []
+        for item in list_obj.listitem_set.all():
+            purchased = ListItemPurchased.objects.filter(list_item = item).first()
+            annotated_items.append({
+                'item': item,
+                'purchased_by': purchased.purchased_by if purchased else None,
+                'purchase_comments': purchased.purchase_comments if purchased else None,
+            })
+        context['annotated_items'] = annotated_items
+        
         return context
     
 class ListItemCreate(LoginRequiredMixin, generic.CreateView):
     model = ListItem
-    fields = ["title", "url", "price", "priority"]
+    fields = ['title', 'url', 'price', 'priority']
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -60,5 +71,25 @@ class ListItemCreate(LoginRequiredMixin, generic.CreateView):
     def get_success_url(self):
         return reverse('xmas_lists:list-detail', kwargs={'pk': self.kwargs['pk']})
     
+class ListItemPurchasedCreate(LoginRequiredMixin, generic.CreateView):
+    model = ListItemPurchased
+    fields = ['purchase_comments']
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        list_obj = get_object_or_404(ListItem, pk=self.kwargs['pk'])
+        context['list-item'] = list_obj
+        return context
+    
+    def form_valid(self, form):
+        form.instance.list_item = get_object_or_404(ListItem, pk=self.kwargs['pk'])
+        form.instance.purchased_by = self.request.user
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        return reverse('xmas_lists:list-detail', kwargs={'pk': 
+            get_object_or_404(ListItem, pk=self.kwargs['pk']).list.id
+        })
+        
     
     

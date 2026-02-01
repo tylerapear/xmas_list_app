@@ -7,25 +7,40 @@
 
         <ul class="xmas-list-list">
             
-            {% if list.listitem_set.all %}
+            {% if annotated_items %}
 
                 <table class="table table-dark table-striped table-bordered rounded shadow-sm align-middle">
                     <tr>
                         <th>Item</th>
                         <th>Price</th>
                         <th>Priority</th>
+                        {% if not is_owner %}
+                            <th>Purchasing</th>
+                        {% endif %}
                     </tr>
-                    {% for item in list.listitem_set.all %}
+                    {% for item in annotated_items %}
                     <tr>
                         <td>
-                            {% if item.url %}
-                                <a href="{{ item.url }}">{{ item.title }}</a>
+                            {% if item.item.url %}
+                                <a href="{{ item.url }}" target="_blank">{{ item.item.title }}</a>
                             {% else %}
-                                {{ item.title }}
+                                {{ item.item.title }}
                             {% endif %}
                         </td>
-                        <td>{% if item.price %}${% endif %}{{ item.price }}</td>
-                        <td>{{ item.get_priority_display }}</td>
+                        <td>{% if item.item.price %}${% endif %}{{ item.item.price }}</td>
+                        <td>{{ item.item.get_priority_display }}</td>
+                        {% if not is_owner %}
+                            <td>
+                                {% if item.purchased_by %}
+                                Purchased by {{ item.purchased_by.first_name }}<br>
+                                Note: "{{ item.purchase_comments }}"
+                                {% else %}
+                                <a href="{% url 'xmas_lists:list-item-purchase' item.item.id %}" class="btn btn-sm rounded-pill d-inline-flex align-items-center">
+                                    <i class="fas fa-shopping-cart me-1"></i>Purchase
+                                </a>
+                                {% endif %}
+                            </td>
+                        {% endif %}
                     </tr>    
                     {% endfor %}
                 </table>
