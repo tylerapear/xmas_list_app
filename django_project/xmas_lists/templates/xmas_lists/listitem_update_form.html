@@ -1,0 +1,18 @@
+{% extends "mysite/base.html" %}
+
+{% block feature %}
+<div class="container d-flex flex-column feature-section">
+    <div class="flex-grow-1">
+        <h1 class="title-section">Update Item: {{ listitem.title }}</h1>
+
+        <form action="" method="post" class="mt-4 p-4 border rounded bg-dark shadow-sm">
+            {% csrf_token %}
+            <table>
+                {{ form.as_table }}
+            </table>
+            <input type="submit" value="Submit" class="bg-dark" />
+        </form>
+
+    </div>
+</div>
+{% endblock feature %}

@@ -26,6 +26,15 @@
                             {% else %}
                                 {{ item.item.title }}
                             {% endif %}
+
+                            {% if is_owner %}
+                                <a href="{% url 'xmas_lists:list-item-update' item.item.id %}" class="btn btn-sm rounded-pill d-inline-flex align-items-center">
+                                    <i class="fas fa-pen-to-square"></i>
+                                </a>
+                                <a href="{% url 'xmas_lists:list-item-delete' item.item.id %}" class="btn btn-sm rounded-pill btn-danger d-inline-flex align-items-center">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            {% endif %}
                         </td>
                         <td>{% if item.item.price %}${% endif %}{{ item.item.price }}</td>
                         <td>{{ item.item.get_priority_display }}</td>

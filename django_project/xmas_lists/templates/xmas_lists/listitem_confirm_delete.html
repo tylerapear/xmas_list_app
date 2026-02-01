@@ -1,0 +1,19 @@
+{% extends "mysite/base.html" %}
+
+{% block feature %}
+
+<div class="container d-flex flex-column feature-section">
+    <div class="flex-grow-1">
+        <h1 class="title-section">Delete Item: {{ listitem.title }}</h1>
+
+        <p>Are you sure you want to delete the item?</p>
+
+        <form action="" method="POST">
+            {% csrf_token %}
+            <input type="submit" action="" value="Yes, delete." class="btn">
+        </form>
+
+    </div>
+</div>
+
+{% endblock feature %}

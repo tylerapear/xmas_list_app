@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -70,6 +70,24 @@ class ListItemCreate(LoginRequiredMixin, generic.CreateView):
     
     def get_success_url(self):
         return reverse('xmas_lists:list-detail', kwargs={'pk': self.kwargs['pk']})
+    
+class ListItemUpdate(LoginRequiredMixin, generic.UpdateView):
+    model = ListItem
+    fields = ['title', 'url', 'price', 'priority']
+    template_name = 'xmas_lists/listitem_update_form.html'
+    
+    def get_success_url(self):
+        return reverse('xmas_lists:list-detail', kwargs={'pk': 
+            get_object_or_404(ListItem, pk=self.kwargs['pk']).list.id
+        })
+    
+class ListItemDelete(LoginRequiredMixin, generic.DeleteView):
+    model = ListItem
+    
+    def get_success_url(self):
+        return reverse('xmas_lists:list-detail', kwargs={'pk': 
+            get_object_or_404(ListItem, pk=self.kwargs['pk']).list.id
+        })
     
 class ListItemPurchasedCreate(LoginRequiredMixin, generic.CreateView):
     model = ListItemPurchased
