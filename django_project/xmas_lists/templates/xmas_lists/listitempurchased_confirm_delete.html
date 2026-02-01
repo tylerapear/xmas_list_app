@@ -1,0 +1,19 @@
+{% extends "mysite/base.html" %}
+
+{% block feature %}
+
+<div class="container d-flex flex-column feature-section">
+    <div class="flex-grow-1">
+        <h1 class="title-section">Undo Purchase: {{ listitempurchased.list_item.title }}</h1>
+
+        <p>Are you sure you want un-purchase the item?</p>
+
+        <form action="" method="POST">
+            {% csrf_token %}
+            <input type="submit" action="" value="Yes, undo purchase." class="btn">
+        </form>
+
+    </div>
+</div>
+
+{% endblock feature %}

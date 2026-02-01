@@ -43,6 +43,7 @@ class ListDetailView(LoginRequiredMixin, generic.DetailView):
             purchased = ListItemPurchased.objects.filter(list_item = item).first()
             annotated_items.append({
                 'item': item,
+                'purchased_id': purchased.id if purchased else None,
                 'purchased_by': purchased.purchased_by if purchased else None,
                 'purchase_comments': purchased.purchase_comments if purchased else None,
             })
@@ -109,5 +110,9 @@ class ListItemPurchasedCreate(LoginRequiredMixin, generic.CreateView):
             get_object_or_404(ListItem, pk=self.kwargs['pk']).list.id
         })
         
-    
-    
+class ListItemPurchasedDelete(LoginRequiredMixin, generic.DeleteView):    
+    model = ListItemPurchased
+    def get_success_url(self):
+        return reverse('xmas_lists:list-detail', kwargs={'pk': 
+            get_object_or_404(ListItemPurchased, pk=self.kwargs['pk']).list_item.list.id
+        })

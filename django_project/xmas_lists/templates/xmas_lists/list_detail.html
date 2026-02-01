@@ -39,10 +39,17 @@
                         <td>{% if item.item.price %}${% endif %}{{ item.item.price }}</td>
                         <td>{{ item.item.get_priority_display }}</td>
                         {% if not is_owner %}
-                            <td>
+                            <td class="d-flex align-items-center justify-content-between gap-4">
                                 {% if item.purchased_by %}
-                                Purchased by {{ item.purchased_by.first_name }}<br>
-                                Note: "{{ item.purchase_comments }}"
+                                <div>
+                                    Purchased by {{ item.purchased_by.first_name }}
+                                    <br>
+                                    Note: "{{ item.purchase_comments }}"
+                                </div>
+                                <a href="{% url 'xmas_lists:list-item-unpurchase' item.purchased_id %}" class="btn btn-sm rounded-pill btn-danger d-inline-flex">
+                                    <i class="fas fa-undo"></i>
+                                </a>
+                                
                                 {% else %}
                                 <a href="{% url 'xmas_lists:list-item-purchase' item.item.id %}" class="btn btn-sm rounded-pill d-inline-flex align-items-center">
                                     <i class="fas fa-shopping-cart me-1"></i>Purchase
