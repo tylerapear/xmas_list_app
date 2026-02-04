@@ -2,10 +2,19 @@
 
 {% block feature %}
 <div class="container d-flex flex-column feature-section">
-    <div>
-        <h1 class="title-section fw-bold" style="font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif; color: #fff;">
-            Welcome to the Xmas List App{% if user.is_authenticated %}, {{ user.first_name }}{% endif %}!
-        </h1>
+    <div class="d-flex flex-row align-items-center justify-content-between bg-dark bg-gradient bg-opacity-75 rounded-4 shadow-lg py-4 px-3 my-4">
+        <span class="ms-3">
+            <i class="fa fa-gift display-4 text-success"></i>
+        </span>
+        <div>
+            <h1 class="fw-bold text-white text-center mb-1" style="font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;">
+                Welcome to Giftify{% if user.is_authenticated %}, {{ user.first_name }}{% endif %}!
+            </h1>
+            <div class="text-success text-center fs-5 fst-italic">Effortless gift planning for everyone</div>
+        </div>
+        <span class="me-3">
+            <i class="fa fa-gift display-4 text-success"></i>
+        </span>
     </div>
 
     {% if list %}

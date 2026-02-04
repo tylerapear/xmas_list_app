@@ -42,7 +42,14 @@
             <div class="col-2 other-side d-flex flex-column">
                 {% block site_contents %}
                     <div class="container title-section flex-grow-1">
-                        <div class="h1">Site Contents</div>
+                        <div class="d-flex flex-row align-items-center bg-dark bg-gradient bg-opacity-75 rounded-4 shadow-lg py-3 px-2 my-4">
+                            <span class="me-2 ms-2">
+                                <i class="fa fa-list-ul fs-2 text-success"></i>
+                            </span>
+                            <h3 class="fw-bold text-white mb-0" style="font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;">
+                                Site Contents
+                            </h3>
+                        </div>
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item bg-transparent border-0 p-0">
                                 <a class="list-group-item list-group-item-action bg-transparent fw-bold" href="{% url 'xmas_lists:list-list' %}">
