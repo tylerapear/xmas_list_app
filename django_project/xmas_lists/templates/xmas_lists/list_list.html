@@ -3,27 +3,45 @@
 {% block feature %}
 <div class="container d-flex flex-column feature-section">
     <div class="flex-grow-1">
-        <h1 class="title-section">Upcoming Events</h1>
+        <div class="d-flex flex-row align-items-center justify-content-between bg-dark bg-gradient bg-opacity-75 rounded-4 shadow-lg py-4 px-3 my-4">
+            <span class="ms-3">
+                <i class="fa fa-calendar-check display-4 text-success"></i>
+            </span>
+            <div>
+                <h1 class="fw-bold text-white text-center mb-1" style="font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;">
+                    Upcoming Events
+                </h1>
+                <div class="text-success text-center fs-5 fst-italic">Your event gift lists</div>
+            </div>
+            <span class="me-3">
+                <i class="fa fa-calendar-check display-4 text-success"></i>
+            </span>
+        </div>
 
-        <ul class="xmas-list-list">
-            
-            {% if list_list %}
-
+        {% if list_list %}
+            <div class="row g-4">
                 {% for list in list_list %}
-                <hr/>
-                    <strong>Event: </strong><a href="{% url 'xmas_lists:event-detail' list.event.id %}">{{ list.event.event_title }}</a><br>
-                    <strong>Date: </strong>{{ list.event.event_date }} <br>
-                    <a href="{% url 'xmas_lists:list-detail' list.id %}">Manage My List</a>  
+                <div class="col-12">
+                    <div class="card bg-dark text-white shadow-sm rounded-4">
+                        <div class="card-body">
+                            <h4 class="card-title mb-2">
+                                <i class="fa fa-gift me-2 text-success"></i>
+                                <a href="{% url 'xmas_lists:event-detail' list.event.id %}" class="link-light text-decoration-underline-hover">{{ list.event.event_title }}</a>
+                            </h4>
+                            <p class="card-text mb-1"><strong>Date:</strong> {{ list.event.event_date }}</p>
+                            <a href="{% url 'xmas_lists:list-detail' list.id %}" class="btn btn-success mt-2 px-4 py-2 fw-bold d-inline-flex align-items-center">
+                                <i class="fas fa-list me-2"></i>Manage My List
+                            </a>
+                        </div>
+                    </div>
+                </div>
                 {% endfor %}
+            </div>
+        {% else %}
+            <h3 class="text-center mt-4">There aren't any events.</h3>
+        {% endif %}
 
-            {% else %}
-                <h3>There aren't any events.</h3>
-
-            {% endif %}
-        
-        </ul>
-
-        <a href="{% url 'xmas_lists:event-create'%}" class="btn btn-success mt-4 px-4 py-2 fw-bold d-inline-flex align-items-center">
+        <a href="{% url 'xmas_lists:event-create'%}" class="btn btn-success mt-4 px-4 py-2 fw-bold d-inline-flex align-items-center mb-5">
             <i class="fas fa-plus me-2"></i>Create Event
         </a>
 
