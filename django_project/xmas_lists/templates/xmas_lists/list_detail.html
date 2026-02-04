@@ -2,76 +2,86 @@
 
 {% block feature %}
 <div class="container d-flex flex-column feature-section">
-    <div class="flex-grow-1">
-        <h1 class="title-section">{{ list }}</h1>
 
-        <ul class="xmas-list-list">
+    <!-- Header styled like index.html -->
+    <div class="d-flex flex-row align-items-center justify-content-between bg-dark bg-gradient bg-opacity-75 rounded-4 shadow-lg py-4 px-3 my-4">
+        <span class="ms-3">
+            <i class="fa fa-gift display-4 text-success"></i>
+        </span>
+        <h1 class="fw-bold text-white text-center mb-1" style="font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;">
+            {{ list }}
+        </h1>
+        <span class="me-3">
+            <i class="fa fa-gift display-4 text-success"></i>
+        </span>
+    </div>
+
             
-            {% if annotated_items %}
-
-                <table class="table table-dark table-striped table-bordered rounded shadow-sm align-middle">
-                    <tr>
-                        <th>Item</th>
-                        <th>Price</th>
-                        <th>Priority</th>
-                        {% if not is_owner %}
-                            <th>Purchasing</th>
+    <div class="flex-grow-1">
+        {% if annotated_items %}
+            <table class="table table-dark table-striped table-bordered rounded shadow-sm align-middle">
+                <tr>
+                    <th>Item</th>
+                    <th>Price</th>
+                    <th>Priority</th>
+                    {% if not is_owner %}
+                        <th>Purchasing</th>
+                    {% endif %}
+                </tr>
+                {% for item in annotated_items %}
+                <tr>
+                    <td>
+                        {% if item.item.url %}
+                            <a href="{{ item.item.url }}" target="_blank" class="gift-link fw-semibold text-decoration-underline-hover px-2" style="cursor:pointer;">
+                                <i class="fas fa-external-link-alt me-1 opacity-75"></i>{{ item.item.title }}
+                            </a>
+                        {% else %}
+                            {{ item.item.title }}
                         {% endif %}
-                    </tr>
-                    {% for item in annotated_items %}
-                    <tr>
-                        <td>
-                            {% if item.item.url %}
-                                <a href="{{ item.item.url }}" target="_blank">{{ item.item.title }}</a>
-                            {% else %}
-                                {{ item.item.title }}
-                            {% endif %}
 
-                            {% if is_owner %}
-                                <a href="{% url 'xmas_lists:list-item-update' item.item.id %}" class="btn btn-sm rounded-pill d-inline-flex align-items-center">
-                                    <i class="fas fa-pen-to-square"></i>
-                                </a>
-                                <a href="{% url 'xmas_lists:list-item-delete' item.item.id %}" class="btn btn-sm rounded-pill btn-danger d-inline-flex align-items-center">
-                                    <i class="fas fa-trash"></i>
-                                </a>
+                        {% if is_owner %}
+                            <a href="{% url 'xmas_lists:list-item-update' item.item.id %}" class="btn btn-secondary btn-sm rounded-pill d-inline-flex align-items-center">
+                                <i class="fas fa-pen-to-square"></i>
+                            </a>
+                            <a href="{% url 'xmas_lists:list-item-delete' item.item.id %}" class="btn btn-secondary btn-sm rounded-pill btn-danger d-inline-flex align-items-center">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        {% endif %}
+                    </td>
+                    <td>{% if item.item.price %}${% endif %}{{ item.item.price }}</td>
+                    <td>{{ item.item.get_priority_display }}</td>
+                    {% if not is_owner %}
+                        <td class="d-flex align-items-center justify-content-between gap-4">
+                            {% if item.purchased_by %}
+                            <div>
+                                Purchased by {{ item.purchased_by.first_name }}
+                                <br>
+                                Note: "{{ item.purchase_comments }}"
+                            </div>
+                            <a href="{% url 'xmas_lists:list-item-unpurchase' item.purchased_id %}" class="btn btn-sm rounded-pill btn-danger d-inline-flex">
+                                <i class="fas fa-undo"></i>
+                            </a>
+                            {% else %}
+                            <a href="{% url 'xmas_lists:list-item-purchase' item.item.id %}" class="btn btn-sm rounded-pill d-inline-flex align-items-center">
+                                <i class="fas fa-shopping-cart me-1"></i>Purchase
+                            </a>
                             {% endif %}
                         </td>
-                        <td>{% if item.item.price %}${% endif %}{{ item.item.price }}</td>
-                        <td>{{ item.item.get_priority_display }}</td>
-                        {% if not is_owner %}
-                            <td class="d-flex align-items-center justify-content-between gap-4">
-                                {% if item.purchased_by %}
-                                <div>
-                                    Purchased by {{ item.purchased_by.first_name }}
-                                    <br>
-                                    Note: "{{ item.purchase_comments }}"
-                                </div>
-                                <a href="{% url 'xmas_lists:list-item-unpurchase' item.purchased_id %}" class="btn btn-sm rounded-pill btn-danger d-inline-flex">
-                                    <i class="fas fa-undo"></i>
-                                </a>
-                                
-                                {% else %}
-                                <a href="{% url 'xmas_lists:list-item-purchase' item.item.id %}" class="btn btn-sm rounded-pill d-inline-flex align-items-center">
-                                    <i class="fas fa-shopping-cart me-1"></i>Purchase
-                                </a>
-                                {% endif %}
-                            </td>
-                        {% endif %}
-                    </tr>    
-                    {% endfor %}
-                </table>
-            {% else %}
-                <h2 class="title-section">There are no items in this list yet.</h2>
-            {% endif %}
-        
-            {% if is_owner %}
-                <a href="{% url 'xmas_lists:list-item-create' list.id %}" class="btn btn-success mt-4 px-4 py-2 fw-bold d-inline-flex align-items-center">
-                    <i class="fas fa-plus me-2"></i>Add Item to List
-                </a>
-            {% endif %}
-
-        </ul>
-
+                    {% endif %}
+                </tr>    
+                {% endfor %}
+            </table>
+        {% else %}
+            <h2 class="title-section">There are no items in this list yet.</h2>
+        {% endif %}
+    
+        {% if is_owner %}
+            <a href="{% url 'xmas_lists:list-item-create' list.id %}" class="btn btn-success mt-4 px-4 py-2 fw-bold d-inline-flex align-items-center">
+                <i class="fas fa-plus me-2"></i>Add Item to List
+            </a>
+        {% endif %}
     </div>
+
+
 </div>
 {% endblock feature %}
