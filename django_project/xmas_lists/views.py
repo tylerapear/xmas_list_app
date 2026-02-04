@@ -9,7 +9,9 @@ from django.db.models import Count
 from django.db import IntegrityError
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
+from guardian.shortcuts import assign_perm
 
+from .forms import EventCreateForm
 from .models import Event, List, ListItem, ListItemPurchased
     
 @login_required
@@ -36,13 +38,31 @@ class EventDetailView(LoginRequiredMixin, generic.DetailView):
             .annotate(item_count=Count('listitem'))
         )
         return context
+    
+class EventCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Event
+    form_class = EventCreateForm
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        users = form.cleaned_data['users']
+        event = self.object
+        for user in users:
+            new_list, created = List.objects.get_or_create(event=event, user=user)
+            assign_perm('change_list', user, new_list)
+        return response
+    
+    def get_success_url(self):
+        return reverse('xmas_lists:list-list')
 
 class ListListView(LoginRequiredMixin, generic.ListView):
     model = List
     
     def get_queryset(self):
         return (
-            List.objects.filter(user=self.request.user)
+            List.objects
+            .filter(user=self.request.user)
+            .order_by('event__event_date')
         )
     
 class ListDetailView(LoginRequiredMixin, generic.DetailView):
@@ -66,7 +86,7 @@ class ListDetailView(LoginRequiredMixin, generic.DetailView):
         
         return context
     
-class ListItemCreate(generic.CreateView):
+class ListItemCreateView(generic.CreateView):
     model = ListItem
     fields = ['title', 'url', 'price', 'priority']
     
@@ -93,7 +113,7 @@ class ListItemCreate(generic.CreateView):
     def get_success_url(self):
         return reverse('xmas_lists:list-detail', kwargs={'pk': self.kwargs['pk']})
     
-class ListItemUpdate(LoginRequiredMixin, generic.UpdateView):
+class ListItemUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = ListItem
     fields = ['title', 'url', 'price', 'priority']
     template_name = 'xmas_lists/listitem_update_form.html'
@@ -103,7 +123,7 @@ class ListItemUpdate(LoginRequiredMixin, generic.UpdateView):
             get_object_or_404(ListItem, pk=self.kwargs['pk']).list.id
         })
     
-class ListItemDelete(LoginRequiredMixin, generic.DeleteView):
+class ListItemDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = ListItem
     
     def get_success_url(self):
@@ -111,7 +131,7 @@ class ListItemDelete(LoginRequiredMixin, generic.DeleteView):
             get_object_or_404(ListItem, pk=self.kwargs['pk']).list.id
         })
     
-class ListItemPurchasedCreate(LoginRequiredMixin, generic.CreateView):
+class ListItemPurchasedCreateView(LoginRequiredMixin, generic.CreateView):
     model = ListItemPurchased
     fields = ['purchase_comments']
     
@@ -131,7 +151,7 @@ class ListItemPurchasedCreate(LoginRequiredMixin, generic.CreateView):
             get_object_or_404(ListItem, pk=self.kwargs['pk']).list.id
         })
         
-class ListItemPurchasedDelete(LoginRequiredMixin, generic.DeleteView):    
+class ListItemPurchasedDeleteView(LoginRequiredMixin, generic.DeleteView):    
     model = ListItemPurchased
     def get_success_url(self):
         return reverse('xmas_lists:list-detail', kwargs={'pk': 

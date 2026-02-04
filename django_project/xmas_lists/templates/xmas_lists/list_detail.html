@@ -22,7 +22,7 @@
                     <tr>
                         <td>
                             {% if item.item.url %}
-                                <a href="{{ item.url }}" target="_blank">{{ item.item.title }}</a>
+                                <a href="{{ item.item.url }}" target="_blank">{{ item.item.title }}</a>
                             {% else %}
                                 {{ item.item.title }}
                             {% endif %}
@@ -60,11 +60,16 @@
                     </tr>    
                     {% endfor %}
                 </table>
-                {% if is_owner %}
-                    <a href="{% url 'xmas_lists:list-item-create' list.id %}">Add Item to List</a>
-                {% endif %}
+            {% else %}
+                <h2 class="title-section">There are no items in this list yet.</h2>
             {% endif %}
         
+            {% if is_owner %}
+                <a href="{% url 'xmas_lists:list-item-create' list.id %}" class="btn btn-success mt-4 px-4 py-2 fw-bold d-inline-flex align-items-center">
+                    <i class="fas fa-plus me-2"></i>Add Item to List
+                </a>
+            {% endif %}
+
         </ul>
 
     </div>

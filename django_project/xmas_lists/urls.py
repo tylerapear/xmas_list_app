@@ -6,11 +6,12 @@ app_name = "xmas_lists"
 urlpatterns = [
     path("", views.index, name='index'),
     path("event/<int:pk>/", views.EventDetailView.as_view(), name="event-detail"),
+    path("event/create", views.EventCreateView.as_view(), name="event-create"),
     path("list/", views.ListListView.as_view(), name="list-list"),
     path("list/<int:pk>/", views.ListDetailView.as_view(), name="list-detail"),
-    path("list/<int:pk>/create", views.ListItemCreate.as_view(), name="list-item-create"),
-    path("list-item/<int:pk>/update", views.ListItemUpdate.as_view(), name="list-item-update"),
-    path("list-item/<int:pk>/delete", views.ListItemDelete.as_view(), name="list-item-delete"),
-    path("list-item/<int:pk>/purchase", views.ListItemPurchasedCreate.as_view(), name="list-item-purchase"),
-    path("list-item/<int:pk>/unpurchase", views.ListItemPurchasedDelete.as_view(), name="list-item-unpurchase"),
+    path("list/<int:pk>/create", views.ListItemCreateView.as_view(), name="list-item-create"),
+    path("list-item/<int:pk>/update", views.ListItemUpdateView.as_view(), name="list-item-update"),
+    path("list-item/<int:pk>/delete", views.ListItemDeleteView.as_view(), name="list-item-delete"),
+    path("list-item/<int:pk>/purchase", views.ListItemPurchasedCreateView.as_view(), name="list-item-purchase"),
+    path("list-item/<int:pk>/unpurchase", views.ListItemPurchasedDeleteView.as_view(), name="list-item-unpurchase"),
 ]

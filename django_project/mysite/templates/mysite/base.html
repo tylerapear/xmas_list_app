@@ -26,9 +26,9 @@
                     </form>
                 {% else %}
                     {% if request.path != '/accounts/logout/' %}
-                        <a href="{% url 'login' %}?next={{ request.path }}" class="login-link">Login</a>
+                        <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn btn-success">Login</a>
                     {% else %}
-                        <a href="{% url 'login' %}?next={% url 'xmas_lists:index' %}" class="login-link">Login</a>
+                        <a href="{% url 'login' %}?next={% url 'xmas_lists:index' %}" class="btn btn btn-success">Login</a>
                     {% endif %}
                 {% endif %}
             </div>
