@@ -21,9 +21,9 @@ from . import views
 
 app_name = "mysite"
 urlpatterns = [
-    path("", views.index, name="index"),
+    #path("", views.index, name="index"),
     path("signup/", views.signup, name="signup"),
-    path("xmas_lists/", include("xmas_lists.urls")),
+    path("", include("xmas_lists.urls")),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls'))
 ]

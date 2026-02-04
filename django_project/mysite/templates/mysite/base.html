@@ -15,7 +15,7 @@
     {% block navbar %}
     <nav class="navbar">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'index' %}">Giftify</a>
+            <a class="navbar-brand" href="{% url 'xmas_lists:index' %}">Giftify</a>
             <div>
                 {% if user.is_authenticated %}
                     <form action="{% url 'logout' %}" method="post">
@@ -26,7 +26,7 @@
                     {% if request.path != '/accounts/logout/' %}
                         <a href="{% url 'login' %}?next={{ request.path }}" class="login-link">Login</a>
                     {% else %}
-                        <a href="{% url 'login' %}?next={% url 'index' %}" class="login-link">Login</a>
+                        <a href="{% url 'login' %}?next={% url 'xmas_lists:index' %}" class="login-link">Login</a>
                     {% endif %}
                 {% endif %}
             </div>

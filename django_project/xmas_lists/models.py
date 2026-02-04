@@ -30,8 +30,9 @@ class List(models.Model):
                 name='unique_event_user_pair'
             )
         ]
+        
         ordering = ['created_at']
-    
+        
 class ListItem(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

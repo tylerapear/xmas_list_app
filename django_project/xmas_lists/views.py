@@ -7,8 +7,23 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.db import IntegrityError
+from django.core.exceptions import PermissionDenied
+from django.utils import timezone
 
 from .models import Event, List, ListItem, ListItemPurchased
+    
+@login_required
+def index(request):
+    
+    list_obj = ( 
+        List.objects
+        .filter(event__event_date__gt=timezone.now(), user=request.user)
+        .order_by('event__event_date')
+        .first()
+    )
+    context = {'list': list_obj}
+    return render(request, 'xmas_lists/index.html', context)
+    
     
 class EventDetailView(LoginRequiredMixin, generic.DetailView):
     model = Event
@@ -51,9 +66,15 @@ class ListDetailView(LoginRequiredMixin, generic.DetailView):
         
         return context
     
-class ListItemCreate(LoginRequiredMixin, generic.CreateView):
+class ListItemCreate(generic.CreateView):
     model = ListItem
     fields = ['title', 'url', 'price', 'priority']
+    
+    def dispatch(self, request, *args, **kwargs):
+        list_obj = get_object_or_404(List, pk=self.kwargs['pk'])
+        if not request.user.has_perm('xmas_lists.change_list', list_obj):
+            raise PermissionDenied("You do not have permission to edit this list.")
+        return super().dispatch(request, *args, **kwargs)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
