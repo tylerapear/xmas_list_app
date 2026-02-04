@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'mysite',
     'xmas_lists',
     'guardian',
+    'widget_tweaks',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

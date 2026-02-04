@@ -1,4 +1,5 @@
 {% extends "mysite/base.html" %}
+{% load widget_tweaks %}
 
 {% block feature %}
 <div class="container d-flex flex-column feature-section">
@@ -28,12 +29,10 @@
                         {% csrf_token %}
                         <fieldset>
                             <legend><h1>Login</h1></legend>
-                            {{ form.username.label_tag }}
-                            <br>
-                            {{ form.username }}<br>
-                            {{ form.password.label_tag }}
-                            <br>
-                            {{ form.password }}<br>
+                            <label for="{{ form.username.id_for_label }}" class="form-label">{{ form.username.label }}</label>
+                            {{ form.username|add_class:"form-control" }}<br>
+                            <label for="{{ form.password.id_for_label }}" class="form-label">{{ form.password.label }}</label>
+                            {{ form.password|add_class:"form-control" }}<br>
                         </fieldset>
                         {% if message %}<p style="color: red"><strong>{{ message }}</strong></p>{% endif %}
                         <input type="submit" value="login" class="btn w-100">
