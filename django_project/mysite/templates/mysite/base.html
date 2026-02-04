@@ -15,12 +15,14 @@
     {% block navbar %}
     <nav class="navbar">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'xmas_lists:index' %}">Giftify</a>
+            <a class="navbar-brand fs-3" href="{% url 'xmas_lists:index' %}">
+                <i class="fa fa-gift me-2"></i>Giftify
+            </a>
             <div>
                 {% if user.is_authenticated %}
                     <form action="{% url 'logout' %}" method="post">
                         {% csrf_token %}
-                        <button type="submit" class="btn">Logout</button>
+                        <button type="submit" class="btn btn btn-success">Logout</button>
                     </form>
                 {% else %}
                     {% if request.path != '/accounts/logout/' %}
@@ -37,20 +39,21 @@
     {% block main_content %}
     <div class="container-fluid d-flex flex-column main-content">
         <div class="row flex-grow-1">
-            <div class="container col-9">
-                {% block feature %}{% endblock feature %}
-            </div>
-            <div class="col-3 other-side d-flex flex-column">
+            <div class="col-2 other-side d-flex flex-column">
                 {% block site_contents %}
                     <div class="container title-section flex-grow-1">
                         <div class="h1">Site Contents</div>
-                        <ul class="list-group">
+                        <ul class="list-group list-group-flush">
                             <li class="list-group-item bg-transparent border-0 p-0">
-                                <a href="{% url 'xmas_lists:list-list' %}">View Events</a>
+                                <a class="list-group-item list-group-item-action bg-transparent fw-bold" href="{% url 'xmas_lists:list-list' %}">
+                                    <i class="fa fa-calendar me-2"></i>Events</a>
                             </li>
                         </ul>
                     </div>
                 {% endblock site_contents %}
+            </div>
+            <div class="container col-10">
+                {% block feature %}{% endblock feature %}
             </div>
         </div>
     </div>

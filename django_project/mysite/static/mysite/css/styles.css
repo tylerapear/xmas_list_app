@@ -3,7 +3,7 @@
     --bs-background-primary: #333333;
     --bs-background-secondary: #444444;
     --bs-border-primary: #555555;
-    --bs-button-primary: #666666;
+    --bs-button-primary: #22c55e;
 }
 
 body {
@@ -49,6 +49,15 @@ body {
     background-color: var(--bs-button-primary);
     box-shadow: 0 1px 10px 5px rgba(71, 71, 71, 0.5);
     margin: 10px 0px;
+}
+
+.gift-link {
+    color: #22c55e; /* Tailwind's emerald-500, a modern, vibrant green */
+    transition: color 0.2s;
+}
+.gift-link:hover, .gift-link:focus {
+    color: #42f59e; /* Even lighter green on hover */
+    text-decoration: underline;
 }
 
 .xmas-list-list {
