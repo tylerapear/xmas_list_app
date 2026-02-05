@@ -37,6 +37,32 @@
                         {% if message %}<p style="color: red"><strong>{{ message }}</strong></p>{% endif %}
                         <input type="submit" value="Login" class="btn w-100">
                         <input type="hidden" name="next" value="{{ next }}">
+                        <p>Click below to sign in with Google</p>
+
+                        <!-- GOOGLE-GENERATED CODE  -->
+
+                        <div class="google-signin-wrapper d-flex justify-content-center align-items-center my-3" style="background: none; border-radius: 0px; padding: 0; color-scheme: light">
+                            <div id="g_id_onload"
+                                data-client_id="189858445257-11gob175hraap4qv80pi70ounndi5ndi.apps.googleusercontent.com"
+                                data-context="signin"
+                                data-ux_mode="popup"
+                                data-login_uri="http://localhost:8000/auth-receiver"
+                                data-auto_select="true"
+                                data-itp_support="true">
+                            </div>
+
+                            <div class="g_id_signin"
+                                data-type="standard"
+                                data-shape="rectangular"
+                                data-theme="outline"
+                                data-text="signin_with"
+                                data-size="large"
+                                data-logo_alignment="left">
+                            </div>
+                        </div>
+
+                        <!-- END GOOGLE-GENERATED CODE  -->
+
                     </form>
                 </div>
 

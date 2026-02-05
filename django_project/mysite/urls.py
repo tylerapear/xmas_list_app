@@ -23,6 +23,7 @@ app_name = "mysite"
 urlpatterns = [
     #path("", views.index, name="index"),
     path("signup/", views.signup, name="signup"),
+    path("auth-receiver", views.auth_receiver, name='auth_receiver'),
     path("", include("xmas_lists.urls")),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls'))
