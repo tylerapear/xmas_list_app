@@ -39,7 +39,7 @@
                             {{ item.item.title }}
                         {% endif %}
 
-                        {% if is_owner %}
+                        {% if is_owner and item.modifiable_window %}
                             <a href="{% url 'xmas_lists:list-item-update' item.item.id %}" class="btn btn-secondary btn-sm rounded-pill d-inline-flex align-items-center">
                                 <i class="fas fa-pen-to-square"></i>
                             </a>
@@ -76,6 +76,9 @@
         {% endif %}
     
         {% if is_owner %}
+            {% if has_new_items %}
+                <p><i>You can edit or delete your new items for up to 10 minutes after adding them.</i></p>
+            {% endif %}
             <a href="{% url 'xmas_lists:list-item-create' list.id %}" class="btn btn-success mt-4 px-4 py-2 fw-bold d-inline-flex align-items-center">
                 <i class="fas fa-plus me-2"></i>Add Item to List
             </a>

@@ -9,6 +9,7 @@ from django.db.models import Count
 from django.db import IntegrityError
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
+from datetime import timedelta
 from guardian.shortcuts import assign_perm
 
 from .forms import EventCreateForm
@@ -71,18 +72,29 @@ class ListDetailView(LoginRequiredMixin, generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         list_obj = self.object
-        context['is_owner'] = (list_obj.user == self.request.user)
+        is_owner = (list_obj.user == self.request.user)
+        context['is_owner'] = is_owner
         
+        has_new_items = False
         annotated_items = []
         for item in list_obj.listitem_set.all():
+            
             purchased = ListItemPurchased.objects.filter(list_item = item).first()
-            annotated_items.append({
-                'item': item,
-                'purchased_id': purchased.id if purchased else None,
-                'purchased_by': purchased.purchased_by if purchased else None,
-                'purchase_comments': purchased.purchase_comments if purchased else None,
-            })
+            
+            ten_minutes_after_created = item.created_at + timedelta(minutes=10)
+            modifiable_window = timezone.now() < ten_minutes_after_created
+            has_new_items = True if modifiable_window or has_new_items else False
+            
+            if not modifiable_window or is_owner:
+                annotated_items.append({
+                    'item': item,
+                    'purchased_id': purchased.id if purchased else None,
+                    'purchased_by': purchased.purchased_by if purchased else None,
+                    'purchase_comments': purchased.purchase_comments if purchased else None,
+                    'modifiable_window': modifiable_window,
+                })
         context['annotated_items'] = annotated_items
+        context['has_new_items'] = has_new_items
         
         return context
     
