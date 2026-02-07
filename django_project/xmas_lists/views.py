@@ -119,6 +119,7 @@ class ListItemCreateView(generic.CreateView):
         try:
             return super().form_valid(form)
         except IntegrityError:
+            print("errorrrrr")
             form.add_error(None, "An item with this title already exists on this list")
             return self.form_invalid(form)
     
