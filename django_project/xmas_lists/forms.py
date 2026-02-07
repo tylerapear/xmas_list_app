@@ -6,7 +6,7 @@ class EventCreateForm(forms.ModelForm):
     
     users = forms.ModelMultipleChoiceField(
         queryset=User.objects.all(),
-        widget=forms.SelectMultiple,
+        widget=forms.SelectMultiple(attrs={'class': 'select2-users form-control'}),
         required=True,
         help_text="Select users attending this event"
     )

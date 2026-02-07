@@ -145,3 +145,23 @@ body {
     justify-content: center;
     align-items: center;
 }
+
+.select2-container .select2-dropdown {
+    background-color: var(--bs-background-primary);
+}
+
+/* Style the Select2 multi-select container */
+ .select2-selection--multiple {
+    background-color: #23272b !important;
+    color: #fff !important;
+    border: 1px solid #444 !important;
+}
+
+/* Style the selected choices inside the container */
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: #444 !important;
+    color: #fff !important;
+    border: none !important;
+}
+
+

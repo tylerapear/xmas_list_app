@@ -1,18 +1,35 @@
 {% extends "mysite/base.html" %}
+{% load widget_tweaks %}
 
 {% block feature %}
 <div class="container d-flex flex-column feature-section">
     <div class="flex-grow-1">
         <h1 class="title-section">Create Event</h1>
 
-        <form action="" method="post" class="mt-4 p-4 border rounded bg-dark shadow-sm">
+        <form action="" method="post" class="mt-4 p-4 border rounded bg-dark shadow-sm w-100">
             {% csrf_token %}
-            <table>
-                {{ form.as_table }}
-            </table>
+            {% for field in form %}
+                <div class="mb-3">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    {{ field|add_class:"form-control" }}
+                    {% if field.help_text %}
+                        <div class="form-text text-light">{{ field.help_text }}</div>
+                    {% endif %}
+                    {% for error in field.errors %}
+                        <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
             <input type="submit" value="Submit" class="bg-dark" />
         </form>
-
+        <script>
+            $(document).ready(function() {
+                $('.select2-users').select2({
+                    width: '100%',
+                    placeholder: 'Search users by username'
+                });
+            });
+        </script>
     </div>
 </div>
 {% endblock feature %}
