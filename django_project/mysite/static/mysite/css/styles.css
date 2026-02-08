@@ -159,9 +159,15 @@ body {
 
 /* Style the selected choices inside the container */
 .select2-container--default .select2-selection--multiple .select2-selection__choice {
-    background-color: #444 !important;
+    background-color: #22c55e !important;
     color: #fff !important;
     border: none !important;
 }
+
+.select2-container--default .select2-results__option--selected {
+    background-color: #22c55e !important; /* Bootstrap primary blue */
+    color: #fff !important;
+}
+
 
 

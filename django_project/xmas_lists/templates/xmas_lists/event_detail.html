@@ -49,6 +49,9 @@
                 <h4 class="text-center mt-4">No attendees yet.</h4>
             </div>
         {% endif %}
+        <a href="{% url 'xmas_lists:event-update' event.id %}" class="btn btn-success mt-4 px-4 py-2 fw-bold d-inline-flex align-items-center">
+            <i class="fas fa-plus me-2"></i>Edit Event
+        </a>
     </div>
 
 </div>

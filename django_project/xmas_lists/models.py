@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import UniqueConstraint
+from django.urls import reverse
     
 class Event(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -10,6 +11,9 @@ class Event(models.Model):
     
     def __str__(self):
         return f'{self.event_title} ({self.event_date})'
+    
+    def get_absolute_url(self):
+        return reverse('xmas_lists:event-detail', args=[str(self.pk)])
     
     class Meta:
         ordering = ['event_date']
@@ -22,6 +26,9 @@ class List(models.Model):
     
     def __str__(self):
         return f"{self.user.first_name}'s list for {self.event.event_title}"
+    
+    def get_absolute_url(self):
+        return reverse('xmas_lists:list-detail', args=[str(self.pk)])
     
     class Meta:
         constraints = [

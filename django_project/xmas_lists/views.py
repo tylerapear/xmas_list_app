@@ -13,7 +13,7 @@ from datetime import timedelta
 from guardian.shortcuts import assign_perm
 
 from .forms import EventCreateForm
-from .models import Event, List, ListItem, ListItemPurchased
+from .models import Event, List, ListItem, ListItemPurchased, User
     
 @login_required
 def index(request):
@@ -53,8 +53,33 @@ class EventCreateView(LoginRequiredMixin, generic.CreateView):
             assign_perm('change_list', user, new_list)
         return response
     
-    def get_success_url(self):
-        return reverse('xmas_lists:list-list')
+class EventUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Event
+    form_class = EventCreateForm
+    
+    def get_initial(self):
+        initial = super().get_initial()
+        event = self.get_object()
+        users_in_event = List.objects.filter(event=event).values_list('user', flat=True)
+        initial['users'] = users_in_event
+        return initial
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        event = self.get_object()
+        
+        initial_users = User.objects.filter(list__event=event)
+        updated_users = form.cleaned_data['users']
+        
+        # Delete any removed users
+        for user in initial_users:
+            if user not in updated_users:
+                List.objects.filter(user=user, event=event).delete()
+        
+        for user in updated_users:
+            new_list, created = List.objects.get_or_create(event=event, user=user)
+            assign_perm('change_list', user, new_list)
+        return response
 
 class ListListView(LoginRequiredMixin, generic.ListView):
     model = List
