@@ -10,10 +10,11 @@ from django.db import IntegrityError
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 from datetime import timedelta
-from guardian.shortcuts import assign_perm
+from guardian.shortcuts import assign_perm, remove_perm
+from guardian.mixins import PermissionRequiredMixin as GuardianPermissionRequiredMixin
 
 from .forms import EventCreateForm
-from .models import Event, List, ListItem, ListItemPurchased, User
+from .models import Event, EventAdmin, List, ListItem, ListItemPurchased, User
     
 @login_required
 def index(request):
@@ -45,40 +46,86 @@ class EventCreateView(LoginRequiredMixin, generic.CreateView):
     form_class = EventCreateForm
     
     def form_valid(self, form):
+        
+        # Set Event Owner
+        form.instance.event_owner = self.request.user
+        
         response = super().form_valid(form)
-        users = form.cleaned_data['users']
         event = self.object
+        
+        # Create lists for each user and assign OLPs
+        users = form.cleaned_data['users']
         for user in users:
             new_list, created = List.objects.get_or_create(event=event, user=user)
             assign_perm('change_list', user, new_list)
+            
+        # Set owner as admin
+        assign_perm('change_event', self.request.user, event)
+            
+        # Add EventAdmin records for each event admin and assign OLPs
+        event_admins = form.cleaned_data['event_admins']
+        for user in event_admins:
+            new_admin, created = EventAdmin.objects.get_or_create(event=event, user=user)
+            assign_perm('change_event', user, event)
+            
+            
         return response
     
-class EventUpdateView(LoginRequiredMixin, generic.UpdateView):
+class EventUpdateView(GuardianPermissionRequiredMixin, generic.UpdateView):
     model = Event
     form_class = EventCreateForm
+    permission_required = 'xmas_lists.change_event'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['event'] = self.get_object()
+        return context
     
     def get_initial(self):
         initial = super().get_initial()
         event = self.get_object()
-        users_in_event = List.objects.filter(event=event).values_list('user', flat=True)
-        initial['users'] = users_in_event
+        
+        # Get Current Users
+        current_users = List.objects.filter(event=event).values_list('user', flat=True)
+        initial['users'] = current_users
+    
+        # Get Current Admins
+        current_admins = EventAdmin.objects.filter(event=event).values_list('user', flat=True)
+        initial['event_admins'] = current_admins
         return initial
     
     def form_valid(self, form):
+        print("form")
         response = super().form_valid(form)
         event = self.get_object()
         
         initial_users = User.objects.filter(list__event=event)
         updated_users = form.cleaned_data['users']
+        initial_admins = User.objects.filter(eventadmin__event=event)
+        updated_admins = form.cleaned_data['event_admins']
         
         # Delete any removed users
         for user in initial_users:
             if user not in updated_users:
                 List.objects.filter(user=user, event=event).delete()
+                
+        # Delete any removed admins
+        for user in initial_admins:
+            if user not in updated_admins:
+                EventAdmin.objects.filter(user=user, event=event).delete()
+                remove_perm('change_event', user, event)
         
+        # Create lists for each user and assign OLPs
         for user in updated_users:
             new_list, created = List.objects.get_or_create(event=event, user=user)
             assign_perm('change_list', user, new_list)
+    
+        # Add EventAdmin records for each event admin and assign OLPs
+        event_admins = form.cleaned_data['event_admins']
+        for user in event_admins:
+            new_admin, created = EventAdmin.objects.get_or_create(event=event, user=user)
+            assign_perm('change_event', user, event)
+            
         return response
 
 class ListListView(LoginRequiredMixin, generic.ListView):

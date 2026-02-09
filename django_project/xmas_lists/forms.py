@@ -11,6 +11,13 @@ class EventCreateForm(forms.ModelForm):
         help_text="Select users attending this event"
     )
     
+    event_admins = forms.ModelMultipleChoiceField(
+        queryset=User.objects.all(),
+        widget=forms.SelectMultiple(attrs={'class': 'select2-users form-control'}),
+        required=False,
+        help_text="Select admins for this event",
+    )
+    
     class Meta:
         model = Event
-        fields = ['event_title', 'event_date', 'users']
+        fields = ['event_title', 'event_date', 'users', 'event_admins']

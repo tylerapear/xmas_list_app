@@ -8,6 +8,7 @@ class Event(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     event_title = models.CharField(max_length=200, help_text="The name of the event", null=False)
     event_date = models.DateField(help_text = "The date of the event", null=False)
+    event_owner = models.ForeignKey(User, on_delete=models.RESTRICT)
     
     def __str__(self):
         return f'{self.event_title} ({self.event_date})'
@@ -17,6 +18,12 @@ class Event(models.Model):
     
     class Meta:
         ordering = ['event_date']
+        
+class EventAdmin(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    event = models.ForeignKey(Event, on_delete=models.RESTRICT)
+    user = models.ForeignKey(User, on_delete=models.RESTRICT)
 
 class List(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)

@@ -6,6 +6,10 @@
     <div class="flex-grow-1">
         <h1 class="title-section">Create Event</h1>
 
+        {% if event.event_owner %}
+            <p>Event Owner: {{ event.event_owner.first_name }} {{ event.event_owner.last_name }}</p>
+        {% endif %}
+
         <form action="" method="post" class="mt-4 p-4 border rounded bg-dark shadow-sm w-100">
             {% csrf_token %}
             {% for field in form %}
