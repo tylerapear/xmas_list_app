@@ -10,9 +10,12 @@ class EventObjectAdmin(GuardedModelAdmin):
 class ListObjectAdmin(GuardedModelAdmin):
     pass
 
+class EventInviteAdmin(GuardedModelAdmin):
+    pass
+
 admin.site.register(Event, EventObjectAdmin)
 admin.site.register(EventAdmin)
-admin.site.register(EventInvite)
+admin.site.register(EventInvite, EventInviteAdmin)
 admin.site.register(List, ListObjectAdmin)
 admin.site.register(ListItem)
 admin.site.register(ListItemPurchased)

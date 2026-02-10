@@ -5,7 +5,7 @@ from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count
+from django.db.models import Count, Q, Prefetch
 from django.db import IntegrityError
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
@@ -13,21 +13,42 @@ from datetime import timedelta
 from guardian.shortcuts import assign_perm, remove_perm
 from guardian.mixins import PermissionRequiredMixin as GuardianPermissionRequiredMixin
 
-from .forms import EventCreateForm
-from .models import Event, EventAdmin, List, ListItem, ListItemPurchased, User
+from .forms import EventCreateForm, EventInviteResponseForm
+from .models import *
     
 @login_required
 def index(request):
     
+    user = request.user
+    
     list_obj = ( 
         List.objects
-        .filter(event__event_date__gt=timezone.now(), user=request.user)
+        .filter(event__event_date__gt=timezone.now(), user=user)
         .order_by('event__event_date')
         .first()
     )
     context = {'list': list_obj}
+    
     return render(request, 'xmas_lists/index.html', context)
     
+class EventListView(LoginRequiredMixin, generic.ListView):
+    model = Event
+    
+    def get_queryset(self):
+        user = self.request.user
+        
+        # Collect all events where the current user is an owner, admin, or attendee
+        return Event.objects.filter(
+            Q(event_owner=user) |
+            Q(list__user=user) |
+            Q(eventadmin__user=user)
+        ).prefetch_related(
+            Prefetch(
+                'list_set',
+                queryset=List.objects.filter(user=user),
+                to_attr='my_lists'
+            )
+        ).distinct()
     
 class EventDetailView(LoginRequiredMixin, generic.DetailView):
     model = Event
@@ -53,12 +74,12 @@ class EventCreateView(LoginRequiredMixin, generic.CreateView):
         response = super().form_valid(form)
         event = self.object
         
-        # Create lists for each user and assign OLPs
-        users = form.cleaned_data['users']
-        for user in users:
-            new_list, created = List.objects.get_or_create(event=event, user=user)
-            assign_perm('change_list', user, new_list)
-            
+        # Create EventInvites
+        invited_users = form.cleaned_data['invited_users']
+        for user in invited_users:
+            event_invite, created = EventInvite.objects.get_or_create(event=event, user=user)
+            assign_perm('change_eventinvite', user, event_invite) 
+        
         # Set owner as admin
         assign_perm('change_event', self.request.user, event)
             
@@ -68,7 +89,7 @@ class EventCreateView(LoginRequiredMixin, generic.CreateView):
             new_admin, created = EventAdmin.objects.get_or_create(event=event, user=user)
             assign_perm('change_event', user, event)
             
-            
+        
         return response
     
 class EventUpdateView(GuardianPermissionRequiredMixin, generic.UpdateView):
@@ -95,12 +116,11 @@ class EventUpdateView(GuardianPermissionRequiredMixin, generic.UpdateView):
         return initial
     
     def form_valid(self, form):
-        print("form")
         response = super().form_valid(form)
         event = self.get_object()
         
         initial_users = User.objects.filter(list__event=event)
-        updated_users = form.cleaned_data['users']
+        updated_users = form.cleaned_data['invited_users']
         initial_admins = User.objects.filter(eventadmin__event=event)
         updated_admins = form.cleaned_data['event_admins']
         
@@ -108,17 +128,18 @@ class EventUpdateView(GuardianPermissionRequiredMixin, generic.UpdateView):
         for user in initial_users:
             if user not in updated_users:
                 List.objects.filter(user=user, event=event).delete()
+                EventInvite.objects.filter(user=user, event=event).delete()
                 
         # Delete any removed admins
         for user in initial_admins:
             if user not in updated_admins:
                 EventAdmin.objects.filter(user=user, event=event).delete()
                 remove_perm('change_event', user, event)
-        
-        # Create lists for each user and assign OLPs
+            
+        # Create EventInvites
         for user in updated_users:
-            new_list, created = List.objects.get_or_create(event=event, user=user)
-            assign_perm('change_list', user, new_list)
+            event_invite, created = EventInvite.objects.get_or_create(event=event, user=user)
+            assign_perm('change_eventinvite', user, event_invite) 
     
         # Add EventAdmin records for each event admin and assign OLPs
         event_admins = form.cleaned_data['event_admins']
@@ -127,6 +148,52 @@ class EventUpdateView(GuardianPermissionRequiredMixin, generic.UpdateView):
             assign_perm('change_event', user, event)
             
         return response
+    
+class EventInviteListView(LoginRequiredMixin, generic.ListView):
+    model = EventInvite
+    
+    def get_queryset(self):
+        return (
+            EventInvite.objects
+            .filter(user=self.request.user)
+            .order_by('created_at')
+        )
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['pending_invites'] = context['eventinvite_list'].filter(accepted_at__isnull=True).filter(rejected_at__isnull=True)
+        context['accepted_invites'] = context['eventinvite_list'].filter(accepted_at__isnull=False).filter(rejected_at__isnull=True)
+        context['declined_invites'] = context['eventinvite_list'].filter(accepted_at__isnull=True).filter(rejected_at__isnull=False)
+        return context
+
+class EventInviteUpdateView(GuardianPermissionRequiredMixin, generic.UpdateView):
+    model = EventInvite
+    form_class = EventInviteResponseForm
+    permission_required = 'change_eventinvite'
+    
+    def dispatch(self, request, *args, **kwargs):
+        if self.get_object().accepted_at or self.get_object().rejected_at:
+            raise PermissionDenied("You have already responded to this invitation")
+        return super().dispatch(request, *args, **kwargs)
+    
+    def form_valid(self, form):
+        response = form.cleaned_data['response']
+        invite = self.get_object()
+        print(response)
+        if response == "accept":
+            form.instance.accepted_at = timezone.now()
+
+            # Create lists for user and assign OLPs
+            new_list, created = List.objects.get_or_create(event=invite.event, user=invite.user)
+            assign_perm('change_list', invite.user, new_list)
+            
+            return super().form_valid(form)
+        elif response == "decline":
+            form.instance.rejected_at = timezone.now()
+            return super().form_valid(form)
+    
+    def get_success_url(self):
+        return reverse('xmas_lists:eventinvite-list')
 
 class ListListView(LoginRequiredMixin, generic.ListView):
     model = List
@@ -191,7 +258,6 @@ class ListItemCreateView(generic.CreateView):
         try:
             return super().form_valid(form)
         except IntegrityError:
-            print("errorrrrr")
             form.add_error(None, "An item with this title already exists on this list")
             return self.form_invalid(form)
     
