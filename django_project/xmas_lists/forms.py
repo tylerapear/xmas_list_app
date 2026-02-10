@@ -1,10 +1,10 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Event
+from .models import Event, EventInvite
 
 class EventCreateForm(forms.ModelForm):
     
-    users = forms.ModelMultipleChoiceField(
+    invited_users = forms.ModelMultipleChoiceField(
         queryset=User.objects.all(),
         widget=forms.SelectMultiple(attrs={'class': 'select2-users form-control'}),
         required=True,
@@ -20,4 +20,22 @@ class EventCreateForm(forms.ModelForm):
     
     class Meta:
         model = Event
-        fields = ['event_title', 'event_date', 'users', 'event_admins']
+        fields = ['event_title', 'event_date', 'invited_users', 'event_admins']
+        
+class EventInviteResponseForm(forms.ModelForm):
+    
+    RESPONSE_CHOICES = [
+        ('accept', 'Accept'),
+        ('decline', 'Decline'),
+    ]
+    
+    response = forms.ChoiceField(
+        choices=RESPONSE_CHOICES,
+        widget=forms.Select,
+        required=True,
+        help_text="Accept or decline this invitation"
+    )
+    
+    class Meta:
+        model = EventInvite
+        fields = ['response']
