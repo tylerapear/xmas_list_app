@@ -24,6 +24,13 @@ class EventAdmin(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     event = models.ForeignKey(Event, on_delete=models.RESTRICT)
     user = models.ForeignKey(User, on_delete=models.RESTRICT)
+    
+class EventInvite(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    event = models.ForeignKey(Event, on_delete=models.RESTRICT)
+    user = models.ForeignKey(User, on_delete=models.RESTRICT)
+    accepted_at = models.DateTimeField()
 
 class List(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
