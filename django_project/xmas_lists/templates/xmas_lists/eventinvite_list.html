@@ -20,66 +20,80 @@
 
         {% if eventinvite_list %}
 
-            {% if pending_invites %}
+            <div id="pending-section">
                 <hr>
                 <h3>Pending Invitations</h3>
-                <div class="row g-4">
-                    {% for invite in pending_invites %}
-                        <div class="col-12">
-                            <div class="card bg-dark text-white shadow-sm rounded-4">
-                                <div class="card-body">
-                                    <h4 class="card-title mb-2">
-                                        <i class="fa fa-envelope me-2 text-success"></i>
-                                        <a href="{% url 'xmas_lists:eventinvite-update' invite.id %}" class="link-light text-decoration-underline-hover">{{ invite }}</a>
-                                    </h4>
-                                    <span><i>{{ invite.event.event_owner.first_name }} {{ invite.event.event_owner.last_name }}</i> has invited you to participate in this event.</span>
+                {% if pending_invites %}
+                    <div class="row g-4">
+                        {% for invite in pending_invites %}
+                            <div class="col-12">
+                                <div class="card bg-dark text-white shadow-sm rounded-4">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-2">
+                                            <i class="fa fa-envelope me-2 text-success"></i>
+                                            <a href="{% url 'xmas_lists:eventinvite-update' invite.id %}" class="link-light text-decoration-underline-hover">{{ invite }}</a>
+                                        </h4>
+                                        <span><i>{{ invite.event.event_owner.first_name }} {{ invite.event.event_owner.last_name }}</i> has invited you to participate in this event.</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>There are no pending invitations</p>
+                {% endif %}
+                <hr>
+            </div>
 
-            {% if accepted_invites %}
+            <div id="accepted-section">
                 <hr>
                 <h3>Accepted Invitations</h3>
-                <div class="row g-4">
-                    {% for invite in accepted_invites %}
-                        <div class="col-12">
-                            <div class="card bg-dark text-white shadow-sm rounded-4">
-                                <div class="card-body">
-                                    <h4 class="card-title mb-2">
-                                        <i class="fa fa-envelope me-2 text-success"></i>
-                                        <span class="link-light text-decoration-underline-hover">{{ invite }}</span>
-                                    </h4>
-                                    <span class="text-success">You have accepted this invitation</span>
+                {% if accepted_invites %}
+                    <div class="row g-4">
+                        {% for invite in accepted_invites %}
+                            <div class="col-12">
+                                <div class="card bg-dark text-white shadow-sm rounded-4">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-2">
+                                            <i class="fa fa-envelope me-2 text-success"></i>
+                                            <span class="link-light text-decoration-underline-hover">{{ invite }}</span>
+                                        </h4>
+                                        <span class="text-success">You have accepted this invitation</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>There are no accepted invitations</p>
+                {% endif %}
+                <hr>
+            </div>
 
-            {% if declined_invites %}
+            <div id="declined-section">
                 <hr>
                 <h3>Declined Invitations</h3>
-                <div class="row g-4">
-                    {% for invite in declined_invites %}
-                        <div class="col-12">
-                            <div class="card bg-dark text-white shadow-sm rounded-4">
-                                <div class="card-body">
-                                    <h4 class="card-title mb-2">
-                                        <i class="fa fa-envelope me-2 text-success"></i>
-                                        <span class="link-light text-decoration-underline-hover">{{ invite }}</span>
-                                    </h4>
-                                    <span class="text-danger">You have declined this invitation</span>
+                {% if declined_invites %}
+                    <div class="row g-4">
+                        {% for invite in declined_invites %}
+                            <div class="col-12">
+                                <div class="card bg-dark text-white shadow-sm rounded-4">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-2">
+                                            <i class="fa fa-envelope me-2 text-success"></i>
+                                            <span class="link-light text-decoration-underline-hover">{{ invite }}</span>
+                                        </h4>
+                                        <span class="text-danger">You have declined this invitation</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-            <hr>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>There are no declined invitations</p>
+                {% endif %}
+                <hr>
+            </div>
 
         {% else %}
                 <h3 class="text-center mt-4">You don't have any invites</h3>
@@ -89,3 +103,58 @@
     </div>
 </div>
 {% endblock feature %}
+
+{% block site_contents %}
+    <div class="container title-section flex-grow-1">
+        <div class="d-flex flex-row align-items-center bg-dark bg-gradient bg-opacity-75 rounded-4 shadow-lg py-3 px-2 my-4">
+            <span class="me-2 ms-2">
+                <i class="fa fa-list-ul fs-2 text-success"></i>
+            </span>
+            <h3 class="fw-bold text-white mb-0" style="font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;">
+                Site Contents
+            </h3>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item bg-transparent border-0 p-0">
+                <a class="list-group-item list-group-item-action bg-transparent fw-bold" href="{% url 'xmas_lists:event-list' %}">
+                <i class="fa fa-calendar me-2"></i>Events</a>
+            </li>
+            <li class="list-group-item bg-transparent border-0 p-0">
+                <a class="list-group-item list-group-item-action bg-transparent fw-bold" href="{% url 'xmas_lists:eventinvite-list' %}">
+                    <i class="fa fa-envelope me-2"></i>Event Invites  
+                    {% if pending_invites %}<span class="badge rounded-pill bg-danger ms-2">{{ pending_invites|length }}</span>{% endif %}
+                </a>
+                <ul class="list-unstyled ms-4">
+                    <li>
+                        <button class="list-group-item list-group-item-action bg-transparent fw-bold" onclick="showSection('pending')">
+                        <i class="fa fa-clock me-2"></i>Pending Invitations</button>
+                    </li>
+                    <li>
+                        <button class="list-group-item list-group-item-action bg-transparent fw-bold" onclick="showSection('accepted')">
+                        <i class="fa fa-check-circle me-2"></i>Accepted Invitations</button>
+                    </li>
+                    <li>
+                        <button class="list-group-item list-group-item-action bg-transparent fw-bold" onclick="showSection('declined')">
+                        <i class="fa fa-times-circle me-2"></i>Declined Invitations</button>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        function showSection(section) {
+            $('#pending-section').toggle(section === 'pending');
+            $('#accepted-section').toggle(section === 'accepted');
+            $('#declined-section').toggle(section === 'declined');
+        }
+
+        $(document).ready(function() {
+            $('#pending-section').show();
+            $('#accepted-section').hide();
+            $('#declined-section').hide();
+        })
+
+    </script>
+
+{% endblock site_contents %}
