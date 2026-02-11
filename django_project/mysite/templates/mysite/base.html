@@ -57,13 +57,16 @@
             <ul class="list-group list-group-flush">
                 <li class="list-group-item bg-transparent border-0 p-0">
                     <a class="list-group-item list-group-item-action bg-transparent fw-bold" href="{% url 'xmas_lists:event-list' %}">
-                        <i class="fa fa-calendar me-2"></i>Events</a>
+                        <i class="fa fa-calendar me-2"></i>Events
+                    </a>
+                    {% block events_nav %}{% endblock %}
                 </li>
                 <li class="list-group-item bg-transparent border-0 p-0">
                     <a class="list-group-item list-group-item-action bg-transparent fw-bold" href="{% url 'xmas_lists:eventinvite-list' %}">
                         <i class="fa fa-envelope me-2"></i>Event Invites  
                         {% if pending_invites %}<span class="badge rounded-pill bg-danger ms-2">{{ pending_invites|length }}</span>{% endif %}
                     </a>
+                    {% block invites_nav %}{% endblock %}
                 </li>
             </ul>
         </div>

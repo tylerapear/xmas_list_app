@@ -21,7 +21,6 @@
         {% if eventinvite_list %}
 
             <div id="pending-section">
-                <hr>
                 <h3>Pending Invitations</h3>
                 {% if pending_invites %}
                     <div class="row g-4">
@@ -42,11 +41,9 @@
                 {% else %}
                     <p>There are no pending invitations</p>
                 {% endif %}
-                <hr>
             </div>
 
             <div id="accepted-section">
-                <hr>
                 <h3>Accepted Invitations</h3>
                 {% if accepted_invites %}
                     <div class="row g-4">
@@ -67,11 +64,9 @@
                 {% else %}
                     <p>There are no accepted invitations</p>
                 {% endif %}
-                <hr>
             </div>
 
             <div id="declined-section">
-                <hr>
                 <h3>Declined Invitations</h3>
                 {% if declined_invites %}
                     <div class="row g-4">
@@ -92,7 +87,6 @@
                 {% else %}
                     <p>There are no declined invitations</p>
                 {% endif %}
-                <hr>
             </div>
 
         {% else %}
@@ -104,43 +98,21 @@
 </div>
 {% endblock feature %}
 
-{% block site_contents %}
-    <div class="container title-section flex-grow-1">
-        <div class="d-flex flex-row align-items-center bg-dark bg-gradient bg-opacity-75 rounded-4 shadow-lg py-3 px-2 my-4">
-            <span class="me-2 ms-2">
-                <i class="fa fa-list-ul fs-2 text-success"></i>
-            </span>
-            <h3 class="fw-bold text-white mb-0" style="font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;">
-                Site Contents
-            </h3>
-        </div>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item bg-transparent border-0 p-0">
-                <a class="list-group-item list-group-item-action bg-transparent fw-bold" href="{% url 'xmas_lists:event-list' %}">
-                <i class="fa fa-calendar me-2"></i>Events</a>
-            </li>
-            <li class="list-group-item bg-transparent border-0 p-0">
-                <a class="list-group-item list-group-item-action bg-transparent fw-bold" href="{% url 'xmas_lists:eventinvite-list' %}">
-                    <i class="fa fa-envelope me-2"></i>Event Invites  
-                    {% if pending_invites %}<span class="badge rounded-pill bg-danger ms-2">{{ pending_invites|length }}</span>{% endif %}
-                </a>
-                <ul class="list-unstyled ms-4">
-                    <li>
-                        <button class="list-group-item list-group-item-action bg-transparent fw-bold" onclick="showSection('pending')">
-                        <i class="fa fa-clock me-2"></i>Pending Invitations</button>
-                    </li>
-                    <li>
-                        <button class="list-group-item list-group-item-action bg-transparent fw-bold" onclick="showSection('accepted')">
-                        <i class="fa fa-check-circle me-2"></i>Accepted Invitations</button>
-                    </li>
-                    <li>
-                        <button class="list-group-item list-group-item-action bg-transparent fw-bold" onclick="showSection('declined')">
-                        <i class="fa fa-times-circle me-2"></i>Declined Invitations</button>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </div>
+{% block invites_nav %}
+    <ul class="list-unstyled ms-4">
+        <li>
+            <button class="list-group-item list-group-item-action bg-transparent fw-bold" onclick="showSection('pending')">
+            <i class="fa fa-clock me-2"></i>Pending Invitations</button>
+        </li>
+        <li>
+            <button class="list-group-item list-group-item-action bg-transparent fw-bold" onclick="showSection('accepted')">
+            <i class="fa fa-check-circle me-2"></i>Accepted Invitations</button>
+        </li>
+        <li>
+            <button class="list-group-item list-group-item-action bg-transparent fw-bold" onclick="showSection('declined')">
+            <i class="fa fa-times-circle me-2"></i>Declined Invitations</button>
+        </li>
+    </ul>
 
     <script>
         function showSection(section) {
@@ -157,4 +129,4 @@
 
     </script>
 
-{% endblock site_contents %}
+{% endblock invites_nav %}

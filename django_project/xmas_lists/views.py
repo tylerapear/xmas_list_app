@@ -49,6 +49,19 @@ class EventListView(LoginRequiredMixin, generic.ListView):
                 to_attr='my_lists'
             )
         ).distinct()
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        events = self.get_queryset()
+        
+        context['attending_events'] = [e for e in events if e.my_lists]
+        print(context['attending_events'])
+        context['own_events'] = [e for e in events if e.event_owner == user]
+        admin_event_ids = EventAdmin.objects.filter(user=user)
+        context['admin_events'] = [e for e in events if e.id in admin_event_ids]    
+        
+        return context
     
 class EventDetailView(LoginRequiredMixin, generic.DetailView):
     model = Event
