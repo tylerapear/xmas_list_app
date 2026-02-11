@@ -56,10 +56,15 @@ class EventListView(LoginRequiredMixin, generic.ListView):
         events = self.get_queryset()
         
         context['attending_events'] = [e for e in events if e.my_lists]
-        print(context['attending_events'])
+        context['attending_events_future'] = [e for e in events if e.my_lists and e.event_date >= timezone.now().date()]
+        context['attending_events_past'] = [e for e in events if e.my_lists and e.event_date < timezone.now().date()]
         context['own_events'] = [e for e in events if e.event_owner == user]
+        context['own_events_future'] = [e for e in events if e.event_owner == user and e.event_date >= timezone.now().date()]
+        context['own_events_past'] = [e for e in events if e.event_owner == user and e.event_date < timezone.now().date()]
         admin_event_ids = EventAdmin.objects.filter(user=user)
-        context['admin_events'] = [e for e in events if e.id in admin_event_ids]    
+        context['admin_events'] = [e for e in events if e.id in admin_event_ids]
+        context['admin_events_future'] = [e for e in events if e.id in admin_event_ids and e.event_date >= timezone.now().date()]
+        context['admin_events_past'] = [e for e in events if e.id in admin_event_ids and e.event_date < timezone.now().date()]
         
         return context
     

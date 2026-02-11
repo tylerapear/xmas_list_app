@@ -20,26 +20,56 @@
 
             <div id="attending-section">
                 <div class="row g-4">
-                    <h3>Events I'm Attending</h3>
+                    <h2>Events I'm Attending</h2>
                     {% if attending_events %}
-                        {% for event in attending_events %}
-                        <div class="col-12">
-                            <div class="card bg-dark text-white shadow-sm rounded-4">
-                                <div class="card-body">
-                                    <h4 class="card-title mb-2">
-                                        <i class="fa fa-gift me-2 text-success"></i>
-                                        <a href="{% url 'xmas_lists:event-detail' event.id %}" class="link-light text-decoration-underline-hover">{{ event.event_title }}</a>
-                                    </h4>
-                                    <p class="card-text mb-1"><strong>Date:</strong> {{ event.event_date }}</p>
-                                    {% if event.my_lists %}
-                                        <a href="{% url 'xmas_lists:list-detail' event.my_lists.0.pk %}" class="btn btn-success mt-2 px-4 py-2 fw-bold d-inline-flex align-items-center">
-                                            <i class="fas fa-list me-2"></i>Manage My List
-                                        </a>
-                                    {% endif %}
+
+                        {% if attending_events_future %}
+                            <hr>
+                            <h4>Upcoming Events</h4>
+                            {% for event in attending_events_future %}
+                                <div class="col-12">
+                                    <div class="card bg-dark text-white shadow-sm rounded-4">
+                                        <div class="card-body">
+                                            <h4 class="card-title mb-2">
+                                                <i class="fa fa-gift me-2 text-success"></i>
+                                                <a href="{% url 'xmas_lists:event-detail' event.id %}" class="link-light text-decoration-underline-hover">{{ event.event_title }}</a>
+                                            </h4>
+                                            <p class="card-text mb-1"><strong>Date:</strong> {{ event.event_date }}</p>
+                                            {% if event.my_lists %}
+                                                <a href="{% url 'xmas_lists:list-detail' event.my_lists.0.pk %}" class="btn btn-success mt-2 px-4 py-2 fw-bold d-inline-flex align-items-center">
+                                                    <i class="fas fa-list me-2"></i>Manage My List
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if attending_events_past %}
+                            <hr>
+                            <h4>Past Events</h4>
+                            {% for event in attending_events_past %}
+                                <div class="col-12">
+                                    <div class="card bg-dark text-white shadow-sm rounded-4">
+                                        <div class="card-body">
+                                            <h4 class="card-title mb-2">
+                                                <i class="fa fa-gift me-2 text-success"></i>
+                                                <a href="{% url 'xmas_lists:event-detail' event.id %}" class="link-light text-decoration-underline-hover">{{ event.event_title }}</a>
+                                            </h4>
+                                            <p class="card-text mb-1"><strong>Date:</strong> {{ event.event_date }}</p>
+                                            {% if event.my_lists %}
+                                                <a href="{% url 'xmas_lists:list-detail' event.my_lists.0.pk %}" class="btn btn-success mt-2 px-4 py-2 fw-bold d-inline-flex align-items-center">
+                                                    <i class="fas fa-list me-2"></i>Manage My List
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        
+                        
                     {% else %}
                         <h3>There aren't any events.</h3>
                     {% endif %}
@@ -50,24 +80,53 @@
                 <div class="row g-4">
                     <h3>Events I Own</h3>
                     {% if own_events %}
-                        {% for event in own_events %}
-                        <div class="col-12">
-                            <div class="card bg-dark text-white shadow-sm rounded-4">
-                                <div class="card-body">
-                                    <h4 class="card-title mb-2">
-                                        <i class="fa fa-gift me-2 text-success"></i>
-                                        <a href="{% url 'xmas_lists:event-detail' event.id %}" class="link-light text-decoration-underline-hover">{{ event.event_title }}</a>
-                                    </h4>
-                                    <p class="card-text mb-1"><strong>Date:</strong> {{ event.event_date }}</p>
-                                    {% if event.my_lists %}
-                                        <a href="{% url 'xmas_lists:list-detail' event.my_lists.0.pk %}" class="btn btn-success mt-2 px-4 py-2 fw-bold d-inline-flex align-items-center">
-                                            <i class="fas fa-list me-2"></i>Manage My List
-                                        </a>
-                                    {% endif %}
+
+                        {% if own_events_future %}
+                            <hr>
+                            <h4>Upcoming Events</h4>
+                            {% for event in own_events_future %}
+                                <div class="col-12">
+                                    <div class="card bg-dark text-white shadow-sm rounded-4">
+                                        <div class="card-body">
+                                            <h4 class="card-title mb-2">
+                                                <i class="fa fa-gift me-2 text-success"></i>
+                                                <a href="{% url 'xmas_lists:event-detail' event.id %}" class="link-light text-decoration-underline-hover">{{ event.event_title }}</a>
+                                            </h4>
+                                            <p class="card-text mb-1"><strong>Date:</strong> {{ event.event_date }}</p>
+                                            {% if event.my_lists %}
+                                                <a href="{% url 'xmas_lists:list-detail' event.my_lists.0.pk %}" class="btn btn-success mt-2 px-4 py-2 fw-bold d-inline-flex align-items-center">
+                                                    <i class="fas fa-list me-2"></i>Manage My List
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if own_events_past %}
+                            <hr>
+                            <h4>Past Events</h4>
+                            {% for event in own_events_past %}
+                                <div class="col-12">
+                                    <div class="card bg-dark text-white shadow-sm rounded-4">
+                                        <div class="card-body">
+                                            <h4 class="card-title mb-2">
+                                                <i class="fa fa-gift me-2 text-success"></i>
+                                                <a href="{% url 'xmas_lists:event-detail' event.id %}" class="link-light text-decoration-underline-hover">{{ event.event_title }}</a>
+                                            </h4>
+                                            <p class="card-text mb-1"><strong>Date:</strong> {{ event.event_date }}</p>
+                                            {% if event.my_lists %}
+                                                <a href="{% url 'xmas_lists:list-detail' event.my_lists.0.pk %}" class="btn btn-success mt-2 px-4 py-2 fw-bold d-inline-flex align-items-center">
+                                                    <i class="fas fa-list me-2"></i>Manage My List
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
                     {% else %}
                         <h3>There aren't any events.</h3>
                     {% endif %}
@@ -78,24 +137,53 @@
                 <div class="row g-4">
                     <h3>Events I Administrate</h3>
                     {% if admin_events %}
-                        {% for event in admin_events %}
-                        <div class="col-12">
-                            <div class="card bg-dark text-white shadow-sm rounded-4">
-                                <div class="card-body">
-                                    <h4 class="card-title mb-2">
-                                        <i class="fa fa-gift me-2 text-success"></i>
-                                        <a href="{% url 'xmas_lists:event-detail' event.id %}" class="link-light text-decoration-underline-hover">{{ event.event_title }}</a>
-                                    </h4>
-                                    <p class="card-text mb-1"><strong>Date:</strong> {{ event.event_date }}</p>
-                                    {% if event.my_lists %}
-                                        <a href="{% url 'xmas_lists:list-detail' event.my_lists.0.pk %}" class="btn btn-success mt-2 px-4 py-2 fw-bold d-inline-flex align-items-center">
-                                            <i class="fas fa-list me-2"></i>Manage My List
-                                        </a>
-                                    {% endif %}
+
+                        {% if admin_events_future %}
+                            <hr>
+                            <h4>Upcoming Events</h4>
+                            {% for event in admin_events_future %}
+                                <div class="col-12">
+                                    <div class="card bg-dark text-white shadow-sm rounded-4">
+                                        <div class="card-body">
+                                            <h4 class="card-title mb-2">
+                                                <i class="fa fa-gift me-2 text-success"></i>
+                                                <a href="{% url 'xmas_lists:event-detail' event.id %}" class="link-light text-decoration-underline-hover">{{ event.event_title }}</a>
+                                            </h4>
+                                            <p class="card-text mb-1"><strong>Date:</strong> {{ event.event_date }}</p>
+                                            {% if event.my_lists %}
+                                                <a href="{% url 'xmas_lists:list-detail' event.my_lists.0.pk %}" class="btn btn-success mt-2 px-4 py-2 fw-bold d-inline-flex align-items-center">
+                                                    <i class="fas fa-list me-2"></i>Manage My List
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if admin_events_past %}
+                            <hr>
+                            <h4>Past Events</h4>
+                            {% for event in admin_events_past %}
+                                <div class="col-12">
+                                    <div class="card bg-dark text-white shadow-sm rounded-4">
+                                        <div class="card-body">
+                                            <h4 class="card-title mb-2">
+                                                <i class="fa fa-gift me-2 text-success"></i>
+                                                <a href="{% url 'xmas_lists:event-detail' event.id %}" class="link-light text-decoration-underline-hover">{{ event.event_title }}</a>
+                                            </h4>
+                                            <p class="card-text mb-1"><strong>Date:</strong> {{ event.event_date }}</p>
+                                            {% if event.my_lists %}
+                                                <a href="{% url 'xmas_lists:list-detail' event.my_lists.0.pk %}" class="btn btn-success mt-2 px-4 py-2 fw-bold d-inline-flex align-items-center">
+                                                    <i class="fas fa-list me-2"></i>Manage My List
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
                     {% else %}
                         <h3>There aren't any events.</h3>
                     {% endif %}
