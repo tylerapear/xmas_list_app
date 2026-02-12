@@ -194,4 +194,8 @@ body {
         height: auto;
         min-height: 350px;
     }
+
+    .tab-pane.show.active {
+        position: relative;
+    }
 }
