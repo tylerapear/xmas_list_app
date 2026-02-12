@@ -3,7 +3,7 @@
 {% block feature %}
 <div class="container d-flex flex-column feature-section">
     <div class="d-flex flex-row align-items-center justify-content-between bg-dark bg-gradient bg-opacity-75 rounded-4 shadow-lg py-4 px-3 my-4">
-        <span class="ms-3">
+        <span class="ms-3 d-none d-sm-inline">
             <i class="fa fa-calendar-check display-4 text-success"></i>
         </span>
         <div>
@@ -14,7 +14,7 @@
                 {% if event.event_date %}{{ event.event_date }}{% endif %}
             </div>
         </div>
-        <span class="me-3">
+        <span class="me-3 d-none d-sm-inline">
             <i class="fa fa-calendar-check display-4 text-success"></i>
         </span>
     </div>
@@ -24,6 +24,7 @@
             <h3 class="fw-semibold" style="font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;">
                 <i class="fa fa-users me-2"></i>Attendees
             </h3>
+            <div class="table-responsive">
             <table class="table table-dark table-striped table-bordered rounded shadow-sm align-middle">
                 <thead>
                     <tr>
@@ -44,6 +45,7 @@
                     {% endfor %}
                 </tbody>
             </table>
+            </div>
         {% else %}
             <div>
                 <h4 class="text-center mt-4">No attendees yet.</h4>

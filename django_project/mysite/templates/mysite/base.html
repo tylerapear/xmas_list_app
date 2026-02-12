@@ -19,9 +19,14 @@
     {% block navbar %}
     <nav class="navbar sticky-top">
         <div class="container-fluid">
-            <a class="navbar-brand fs-3" href="{% url 'xmas_lists:index' %}">
-                <i class="fa fa-gift me-2"></i>Giftify
-            </a>
+            <div class="d-flex align-items-center">
+                <button class="btn btn-secondary border-0 d-md-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" aria-controls="mobileSidebar">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand fs-3" href="{% url 'xmas_lists:index' %}">
+                    <i class="fa fa-gift me-2"></i>Giftify
+                </a>
+            </div>
             <div>
                 {% if user.is_authenticated %}
                     <form action="{% url 'logout' %}" method="post">
@@ -40,10 +45,35 @@
     </nav>
     {% endblock navbar %}
 
+    <!-- Mobile Offcanvas Sidebar -->
+    <div class="offcanvas offcanvas-start d-md-none" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel" style="background-color: var(--bs-background-secondary);">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title text-white" id="mobileSidebarLabel"><i class="fa fa-list-ul me-2 text-success"></i>Site Contents</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item bg-transparent border-0 p-0">
+                    <a class="list-group-item list-group-item-action bg-transparent fw-bold" href="{% url 'xmas_lists:event-list' %}">
+                        <i class="fa fa-calendar me-2"></i>Events
+                    </a>
+                    {% block mobile_events_nav %}{% endblock %}
+                </li>
+                <li class="list-group-item bg-transparent border-0 p-0">
+                    <a class="list-group-item list-group-item-action bg-transparent fw-bold" href="{% url 'xmas_lists:eventinvite-list' %}">
+                        <i class="fa fa-envelope me-2"></i>Event Invites
+                        {% if pending_invites %}<span class="badge rounded-pill bg-danger ms-2">{{ pending_invites|length }}</span>{% endif %}
+                    </a>
+                    {% block mobile_invites_nav %}{% endblock %}
+                </li>
+            </ul>
+        </div>
+    </div>
+
     {% block main_content %}
     <div class="container-fluid d-flex flex-column main-content">
         <div class="row flex-grow-1">
-            <div class="col-2 other-side d-flex flex-column position-fixed vh-100 start-0 top-0 p-0 pt-5">
+            <div class="col-2 other-side d-none d-md-flex flex-column position-fixed vh-100 start-0 top-0 p-0 pt-5">
     {% block site_contents %}
         <div class="container title-section flex-grow-1">
             <div class="d-flex flex-row align-items-center bg-dark bg-gradient bg-opacity-75 rounded-4 shadow-lg py-3 px-2 my-4">
@@ -72,7 +102,7 @@
         </div>
     {% endblock site_contents %}
 </div>
-            <div class="container col-10 offset-2">
+            <div class="container col-12 col-md-10 offset-md-2">
                 {% block feature %}{% endblock feature %}
             </div>
         </div>

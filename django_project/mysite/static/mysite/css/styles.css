@@ -169,5 +169,29 @@ body {
     color: #fff !important;
 }
 
+/* Mobile responsive adjustments */
+@media (max-width: 767.98px) {
+    .main-content {
+        height: auto;
+        min-height: calc(100vh - 10vh);
+    }
 
+    .feature-section {
+        height: auto;
+        min-height: calc(100vh - 10vh);
+    }
 
+    .xmas-list-list {
+        width: 100%;
+    }
+
+    .login-title {
+        margin-top: 40px;
+        margin-bottom: 20px;
+    }
+
+    .tab-content {
+        height: auto;
+        min-height: 350px;
+    }
+}

@@ -4,7 +4,7 @@
 <div class="container d-flex flex-column feature-section">
     <div class="flex-grow-1">
         <div class="d-flex flex-row align-items-center justify-content-between bg-dark bg-gradient bg-opacity-75 rounded-4 shadow-lg py-4 px-3 my-4">
-            <span class="ms-3">
+            <span class="ms-3 d-none d-sm-inline">
                 <i class="fa fa-calendar-check display-4 text-success"></i>
             </span>
             <div>
@@ -13,7 +13,7 @@
                 </h1>
                 <div class="text-success text-center fs-5 fst-italic">Your event gift lists</div>
             </div>
-            <span class="me-3">
+            <span class="me-3 d-none d-sm-inline">
                 <i class="fa fa-calendar-check display-4 text-success"></i>
             </span>
         </div>
@@ -230,3 +230,20 @@
 
     </script>
 {% endblock events_nav %}
+
+{% block mobile_events_nav %}
+    <ul class="list-unstyled ms-4">
+        <li>
+            <button class="list-group-item list-group-item-action bg-transparent fw-bold" onclick="showSection('attending')" data-bs-dismiss="offcanvas">
+            <i class="fa fa-user-check me-2"></i>Events I'm Attending</button>
+        </li>
+        <li>
+            <button class="list-group-item list-group-item-action bg-transparent fw-bold" onclick="showSection('own')" data-bs-dismiss="offcanvas">
+            <i class="fa fa-crown me-2"></i>Events I Own</button>
+        </li>
+        <li>
+            <button class="list-group-item list-group-item-action bg-transparent fw-bold" onclick="showSection('admin')" data-bs-dismiss="offcanvas">
+            <i class="fa fa-user-shield me-2"></i>Events I Administrate</button>
+        </li>
+    </ul>
+{% endblock mobile_events_nav %}
