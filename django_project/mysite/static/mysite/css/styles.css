@@ -1,4 +1,4 @@
-@media (max-width: 766.98px) {
+@media (max-width: 991.98px) {
     .main-content {
         height: auto;
         min-height: calc(100vh - 10vh)
@@ -60,6 +60,7 @@ body {
     background-color: var(--bs-background-secondary);
     border-left: 1px solid var(--bs-border-primary);
     padding-left: 15px;
+    overflow: hidden;
 }
 
 .btn {
