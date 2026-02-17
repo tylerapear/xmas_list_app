@@ -1,3 +1,19 @@
+@media (max-width: 766.98px) {
+    .main-content {
+        height: auto;
+        min-height: calc(100vh - 10vh)
+    }
+
+    .feature-section{
+        height: auto;
+        min-height: calc(100vh - 10vh)
+    }
+
+    .xmas-list-list {
+        width: 100%;
+    }
+}
+
 :root {
     --bs-primary: #ee0000;
     --bs-background-primary: #333333;
