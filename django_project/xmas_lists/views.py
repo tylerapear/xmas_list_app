@@ -12,6 +12,7 @@ from django.utils import timezone
 from datetime import timedelta
 from guardian.shortcuts import assign_perm, remove_perm
 from guardian.mixins import PermissionRequiredMixin as GuardianPermissionRequiredMixin
+from django.core.mail import send_mail
 
 from .forms import EventCreateForm, EventInviteResponseForm
 from .models import *

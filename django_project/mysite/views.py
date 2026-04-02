@@ -69,7 +69,7 @@ def signup(request):
         messages.error(request, "A user with this email already exists")
         return HttpResponseRedirect(reverse("login"))
     
-    login(request, user)
+    login(request, user, backend='django.contrib.auth.backends.ModelBackend')
     messages.success(request, "Account created successfully!")
     
-    return HttpResponseRedirect(reverse("index"))
+    return HttpResponseRedirect(reverse("xmas_lists:index"))

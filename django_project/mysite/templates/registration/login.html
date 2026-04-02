@@ -34,6 +34,7 @@
                             <label for="{{ form.password.id_for_label }}" class="form-label">{{ form.password.label }}</label>
                             {{ form.password|add_class:"form-control" }}<br>
                         </fieldset>
+                        <a href="{% url 'password_reset' %}">I Forgot My Password</a>
                         {% if message %}<p style="color: red"><strong>{{ message }}</strong></p>{% endif %}
                         <input type="submit" value="Login" class="btn w-100">
                         <input type="hidden" name="next" value="{{ next }}">
