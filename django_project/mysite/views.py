@@ -64,7 +64,7 @@ def signup(request):
     first_name, username, password = request.POST["first-name"], request.POST["email"], request.POST["password"]
     
     try:
-        user = User.objects.create_user(first_name=first_name, username=username, password=password)
+        user = User.objects.create_user(first_name=first_name, username=username, email=username, password=password)
     except IntegrityError:
         messages.error(request, "A user with this email already exists")
         return HttpResponseRedirect(reverse("login"))

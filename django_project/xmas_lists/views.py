@@ -13,9 +13,11 @@ from datetime import timedelta
 from guardian.shortcuts import assign_perm, remove_perm
 from guardian.mixins import PermissionRequiredMixin as GuardianPermissionRequiredMixin
 from django.core.mail import send_mail
+from django.template.loader import render_to_string
 
 from .forms import EventCreateForm, EventInviteResponseForm
 from .models import *
+from django.conf import settings
     
 @login_required
 def index(request):
@@ -95,9 +97,12 @@ class EventCreateView(LoginRequiredMixin, generic.CreateView):
         
         # Create EventInvites
         invited_users = form.cleaned_data['invited_users']
+        print(invited_users)
         for user in invited_users:
             event_invite, created = EventInvite.objects.get_or_create(event=event, user=user)
             assign_perm('change_eventinvite', user, event_invite) 
+            if created:
+                send_invite_email(user, event)
         
         # Set owner as admin
         assign_perm('change_event', self.request.user, event)
@@ -140,6 +145,7 @@ class EventUpdateView(GuardianPermissionRequiredMixin, generic.UpdateView):
         
         initial_users = User.objects.filter(list__event=event)
         updated_users = form.cleaned_data['invited_users']
+        print(updated_users)
         initial_admins = User.objects.filter(eventadmin__event=event)
         updated_admins = form.cleaned_data['event_admins']
         
@@ -157,8 +163,11 @@ class EventUpdateView(GuardianPermissionRequiredMixin, generic.UpdateView):
             
         # Create EventInvites
         for user in updated_users:
+            print(user)
             event_invite, created = EventInvite.objects.get_or_create(event=event, user=user)
-            assign_perm('change_eventinvite', user, event_invite) 
+            assign_perm('change_eventinvite', user, event_invite)
+            if created:
+                send_invite_email(user, event)
     
         # Add EventAdmin records for each event admin and assign OLPs
         event_admins = form.cleaned_data['event_admins']
@@ -327,3 +336,19 @@ class ListItemPurchasedDeleteView(LoginRequiredMixin, generic.DeleteView):
         return reverse('xmas_lists:list-detail', kwargs={'pk': 
             get_object_or_404(ListItemPurchased, pk=self.kwargs['pk']).list_item.list.id
         })
+
+
+def send_invite_email(user, event):
+    
+    html_message = render_to_string('emails/invite.html', {
+        'first_name': user.first_name
+    })
+    
+    send_mail(
+        subject = "Event Invite",
+        message = "Unable to render message",
+        from_email = settings.DEFAULT_FROM_EMAIL,
+        recipient_list = [user.email],
+        fail_silently = False,
+        html_message = html_message,
+    )
