@@ -1,0 +1,106 @@
+{% extends "mysite/base.html" %}
+
+{% block feature %}
+<div class="container d-flex flex-column feature-section">
+    <div class="flex-grow-1">
+        <div class="d-flex flex-row align-items-center justify-content-between bg-dark bg-gradient bg-opacity-75 rounded-4 shadow-lg py-4 px-3 my-4">
+            <span class="ms-3 d-none d-sm-inline">
+                <i class="fa fa-user display-4 text-success"></i>
+            </span>
+            <div>
+                <h1 class="fw-bold text-white text-center mb-1" style="font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;">
+                    Friends
+                </h1>
+                <div class="text-success text-center fs-5 fst-italic">Your friends and friend requests</div>
+            </div>
+            <span class="me-3 d-none d-sm-inline">
+                <i class="fa fa-user display-4 text-success"></i>
+            </span>
+        </div>
+
+        {% if friendrequest_list %}
+            <div class="row g-4">
+                <h2>Friends</h2>
+                {% for friend in friends %}
+                <div class="col-12">
+                    <div class="card bg-dark text-white shadow-sm rounded-4">
+                        <div class="card-body">
+                            <h4 class="card-title mb-2">
+                                <i class="fa fa-user me-2 text-success"></i>
+                                <a href="" class="link-light text-decoration-underline-hover">{{ friend.requestee.first_name }}</a>
+                            </h4>
+                            <p class="card-text mb-1"><strong>Requested:</strong> {{ friend.created_at }}</p>
+                            <p class="card-text mb-1"><strong>Status:</strong> 
+                            
+                                {% if friend.accepted_at %}
+                                    Accepted
+                                {% elif friend.rejected_at %}
+                                    Rejected
+                                {% else %}
+                                    <i>Pending</i>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                <h2>Sent Friend Requests</h2>
+                {% for request in sent_friendrequests %}
+                <div class="col-12">
+                    <div class="card bg-dark text-white shadow-sm rounded-4">
+                        <div class="card-body">
+                            <h4 class="card-title mb-2">
+                                <i class="fa fa-user me-2 text-success"></i>
+                                <a href="" class="link-light text-decoration-underline-hover">{{ request.requestee.first_name }}</a>
+                            </h4>
+                            <p class="card-text mb-1"><strong>Requested:</strong> {{ request.created_at }}</p>
+                            <p class="card-text mb-1"><strong>Status:</strong> 
+                            
+                                {% if request.accepted_at %}
+                                    Accepted
+                                {% elif request.rejected_at %}
+                                    Rejected
+                                {% else %}
+                                    <i>Pending</i>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                <h2>Recieved Friend Requests</h2>
+                {% for request in recieved_friendrequests %}
+                <div class="col-12">
+                    <div class="card bg-dark text-white shadow-sm rounded-4">
+                        <div class="card-body">
+                            <h4 class="card-title mb-2">
+                                <i class="fa fa-user me-2 text-success"></i>
+                                <a href="" class="link-light text-decoration-underline-hover">{{ request.requestor.first_name }}</a>
+                            </h4>
+                            <p class="card-text mb-1"><strong>Requested:</strong> {{ request.created_at }}</p>
+                            <p class="card-text mb-1"><strong>Status:</strong> 
+                            
+                                {% if request.accepted_at %}
+                                    Accepted
+                                {% elif request.rejected_at %}
+                                    Rejected
+                                {% else %}
+                                    <i>Pending</i>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <h3 class="text-center mt-4">You don't have any friends.</h3>
+        {% endif %}
+
+        <a href="{% url 'xmas_lists:friend-request-create' %}" class="btn btn-success mt-4 px-4 py-2 fw-bold d-inline-flex align-items-center mb-5">
+            <i class="fas fa-plus me-2"></i>Send Friend Request
+        </a>
+
+    </div>
+</div>
+{% endblock feature %}

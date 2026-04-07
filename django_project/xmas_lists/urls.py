@@ -18,4 +18,6 @@ urlpatterns = [
     path("list-item/<int:pk>/delete", views.ListItemDeleteView.as_view(), name="list-item-delete"),
     path("list-item/<int:pk>/purchase", views.ListItemPurchasedCreateView.as_view(), name="list-item-purchase"),
     path("list-item/<int:pk>/unpurchase", views.ListItemPurchasedDeleteView.as_view(), name="list-item-unpurchase"),
+    path("friend-request/", views.FriendRequestListView.as_view(), name="friend-request-list"),
+    path("friend-request/create", views.FriendRequestCreateView.as_view(), name="friend-request-create")
 ]

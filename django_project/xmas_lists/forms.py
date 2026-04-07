@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Event, EventInvite
+from .models import *
 
 class EventCreateForm(forms.ModelForm):
     
@@ -39,3 +39,17 @@ class EventInviteResponseForm(forms.ModelForm):
     class Meta:
         model = EventInvite
         fields = ['response']
+        
+class FriendRequestCreateForm(forms.ModelForm):
+    
+    requestee = forms.ModelChoiceField(
+        queryset=User.objects.all(),
+        widget=forms.Select(attrs={'class': 'select2-users form-control'}),
+        required=True,
+        empty_label="Select a user",
+        help_text="Select user"
+    )
+    
+    class Meta:
+        model = FriendRequest
+        fields = ['requestee']

@@ -108,4 +108,21 @@ class ListItemPurchased(models.Model):
     class Meta:
         verbose_name = "List Item Purchased"
         verbose_name_plural = "List Items Purchased"
+        
+class FriendRequest(models.Model):
+    requestor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friend_requests_sent')
+    requestee = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friend_requests_received')
+    accepted_at = models.DateTimeField(null=True)
+    rejected_at = models.DateTimeField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f'{self.requestor} requested ({self.requestee})'
+    
+    def get_absolute_url(self):
+        return reverse('', args=[str(self.pk)])
+    
+    class Meta:
+        ordering = ['created_at']
     

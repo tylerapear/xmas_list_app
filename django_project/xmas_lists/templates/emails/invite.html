@@ -1,3 +1,12 @@
 <html>
-    <h1>Test {{ first_name }}</h1>
+    <body>
+        <h1>🎉 You're invited! 🎉</h1>
+        <p>{{event_invite.user.first_name}}, You've been invited to create a Giftify gift list for an event!</p>
+        <p>
+            <b>Event</b>: {{event_invite.event.event_title}}<br>
+            <b>Event Date</b>: {{ event_invite.event.event_date}}<br>
+            <b>Created By</b>: {{event_invite.event.event_owner.first_name}}
+        </p>
+        <p><a href="{{ invite_url }}">View your invitation</a></p>
+    </body>
 </html>

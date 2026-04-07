@@ -15,7 +15,7 @@ from guardian.mixins import PermissionRequiredMixin as GuardianPermissionRequire
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
-from .forms import EventCreateForm, EventInviteResponseForm
+from .forms import *
 from .models import *
 from django.conf import settings
     
@@ -102,7 +102,7 @@ class EventCreateView(LoginRequiredMixin, generic.CreateView):
             event_invite, created = EventInvite.objects.get_or_create(event=event, user=user)
             assign_perm('change_eventinvite', user, event_invite) 
             if created:
-                send_invite_email(user, event)
+                send_invite_email(self.request, event_invite)
         
         # Set owner as admin
         assign_perm('change_event', self.request.user, event)
@@ -167,7 +167,7 @@ class EventUpdateView(GuardianPermissionRequiredMixin, generic.UpdateView):
             event_invite, created = EventInvite.objects.get_or_create(event=event, user=user)
             assign_perm('change_eventinvite', user, event_invite)
             if created:
-                send_invite_email(user, event)
+                send_invite_email(self.request, event_invite)
     
         # Add EventAdmin records for each event admin and assign OLPs
         event_admins = form.cleaned_data['event_admins']
@@ -337,18 +337,54 @@ class ListItemPurchasedDeleteView(LoginRequiredMixin, generic.DeleteView):
             get_object_or_404(ListItemPurchased, pk=self.kwargs['pk']).list_item.list.id
         })
 
-
-def send_invite_email(user, event):
+class FriendRequestCreateView(LoginRequiredMixin, generic.CreateView):
+    model = FriendRequest
+    form_class = FriendRequestCreateForm
+    success_url = reverse_lazy('xmas_lists:friend-request-list')
     
+    def form_valid(self, form):
+        form.instance.requestor = self.request.user
+        response = super().form_valid(form)
+        assign_perm('change_friendrequest', self.object.requestee, self.object)
+        assign_perm('change_friendrequest', self.object.requestor, self.object)
+        return response
+    
+class FriendRequestListView(LoginRequiredMixin, generic.ListView):
+    model = FriendRequest
+    
+    def get_queryset(self):
+        user = self.request.user
+        
+        # Collect all events where the current user is an owner, admin, or attendee
+        return FriendRequest.objects.filter(
+            Q(requestor=user) |
+            Q(requestee=user)
+        )
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        friendrequests = self.get_queryset()
+        
+        context['friends'] = [f for f in friendrequests if f.accepted_at]
+        context['sent_friendrequests'] = [f for f in friendrequests if not f.accepted_at and f.requestor == self.request.user]
+        context['recieved_friendrequests'] = [f for f in friendrequests if not f.accepted_at and f.requestee == self.request.user]
+        
+        return context
+
+def send_invite_email(request, event_invite):
+    
+    invite_url = request.build_absolute_uri(reverse('xmas_lists:eventinvite-list'))
     html_message = render_to_string('emails/invite.html', {
-        'first_name': user.first_name
+        'event_invite': event_invite,
+        'invite_url': invite_url
     })
     
     send_mail(
         subject = "Event Invite",
         message = "Unable to render message",
         from_email = settings.DEFAULT_FROM_EMAIL,
-        recipient_list = [user.email],
+        recipient_list = [event_invite.user.email],
         fail_silently = False,
         html_message = html_message,
     )
