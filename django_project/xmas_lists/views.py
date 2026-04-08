@@ -9,7 +9,7 @@ from django.db.models import Count, Q, Prefetch
 from django.db import IntegrityError
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
-from datetime import timedelta
+from datetime import timedelta, datetime
 from guardian.shortcuts import assign_perm, remove_perm
 from guardian.mixins import PermissionRequiredMixin as GuardianPermissionRequiredMixin
 from django.core.mail import send_mail
@@ -371,6 +371,21 @@ class FriendRequestListView(LoginRequiredMixin, generic.ListView):
         context['recieved_friendrequests'] = [f for f in friendrequests if not f.accepted_at and f.requestee == self.request.user]
         
         return context
+    
+class FriendRequestUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = FriendRequest
+    form_class = FriendRequestUpdateForm
+    template_name = 'xmas_lists/friendrequest_update_form.html'
+    success_url = reverse_lazy('xmas_lists:friend-request-list')
+    
+    def form_valid(self, form):
+        response = form.cleaned_data['response']
+        if response == 'accept':
+            form.instance.accepted_at = datetime.now()
+        elif response == 'reject':
+            form.instance.rejected_at = datetime.now()
+            
+        return super().form_valid(form)
 
 def send_invite_email(request, event_invite):
     

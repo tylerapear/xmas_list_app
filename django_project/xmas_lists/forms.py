@@ -53,3 +53,20 @@ class FriendRequestCreateForm(forms.ModelForm):
     class Meta:
         model = FriendRequest
         fields = ['requestee']
+
+class FriendRequestUpdateForm(forms.ModelForm):
+    
+    RESPONSE_CHOICES = [
+        ('accept', 'Accept'),
+        ('reject', 'Reject')
+    ]
+    
+    response = forms.ChoiceField(
+        choices=RESPONSE_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        required=True
+    )
+    
+    class Meta:
+        model = FriendRequest
+        fields = ['response']

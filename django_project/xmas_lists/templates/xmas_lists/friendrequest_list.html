@@ -28,15 +28,16 @@
                                 <div class="card bg-dark text-white shadow-sm rounded-4">
                                     <div class="card-body">
                                         <h4 class="card-title mb-2">
-                                            <i class="fa fa-gift me-2 text-success"></i>
-                                            <a href="{% url 'xmas_lists:event-detail' event.id %}" class="link-light text-decoration-underline-hover">{{ event.event_title }}</a>
-                                        </h4>
-                                        <p class="card-text mb-1"><strong>Date:</strong> {{ event.event_date }}</p>
-                                        {% if event.my_lists %}
-                                            <a href="{% url 'xmas_lists:list-detail' event.my_lists.0.pk %}" class="btn btn-success mt-2 px-4 py-2 fw-bold d-inline-flex align-items-center">
-                                                <i class="fas fa-list me-2"></i>Manage My List
+                                            <i class="fa fa-user me-2 text-success"></i>
+                                            <a href="" class="link-light text-decoration-underline-hover">
+                                                {% if friend.requestor == user %}
+                                                    {{ friend.requestee.first_name }}
+                                                {% else %}
+                                                    {{ friend.requestor.first_name }}
+                                                {% endif %}
                                             </a>
-                                        {% endif %}
+                                        </h4>
+                                        <p class="card-text mb-1"><strong>Friends Since:</strong> {{ friend.accepted_at }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -71,6 +72,9 @@
                                                 <i>Pending</i>
                                             {% endif %}
                                         </p>
+                                        <a href="{% url 'xmas_lists:friend-request-update' friend.pk %}" class="btn btn-success mt-2 px-2 py-2 fw-bold d-inline-flex align-items-center">
+                                            <i class="fas fa-envelope-open me-2"></i>Respond
+                                        </a>
                                     </div>
                                 </div>
                             </div>

@@ -4,7 +4,7 @@
 {% block feature %}
 <div class="container d-flex flex-column feature-section">
     <div class="flex-grow-1">
-        <h1 class="title-section">Friend Request</h1>
+        <h1 class="title-section">Friend Request from {{ object.requestor.first_name }}</h1>
 
         <form action="" method="post" class="mt-4 p-4 border rounded bg-dark shadow-sm w-100">
             {% csrf_token %}
@@ -22,14 +22,6 @@
             {% endfor %}
             <input type="submit" value="Submit" class="bg-dark" />
         </form>
-        <script>
-            $(document).ready(function() {
-                $('.select2-users').select2({
-                    width: '100%',
-                    placeholder: 'Search users by username'
-                });
-            });
-        </script>
     </div>
 </div>
 {% endblock feature %}
