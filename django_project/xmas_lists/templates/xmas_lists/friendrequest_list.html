@@ -18,89 +18,162 @@
             </span>
         </div>
 
-        {% if friendrequest_list %}
-            <div class="row g-4">
-                <h2>Friends</h2>
-                {% for friend in friends %}
-                <div class="col-12">
-                    <div class="card bg-dark text-white shadow-sm rounded-4">
-                        <div class="card-body">
-                            <h4 class="card-title mb-2">
-                                <i class="fa fa-user me-2 text-success"></i>
-                                <a href="" class="link-light text-decoration-underline-hover">{{ friend.requestee.first_name }}</a>
-                            </h4>
-                            <p class="card-text mb-1"><strong>Requested:</strong> {{ friend.created_at }}</p>
-                            <p class="card-text mb-1"><strong>Status:</strong> 
-                            
-                                {% if friend.accepted_at %}
-                                    Accepted
-                                {% elif friend.rejected_at %}
-                                    Rejected
-                                {% else %}
-                                    <i>Pending</i>
-                                {% endif %}
-                            </p>
-                        </div>
-                    </div>
+            <div id="friend-section">
+                <div class="row g-4">
+                    <h2>Friends</h2>
+                    {% if friends %}
+                        <hr>
+                        {% for friend in friends %}
+                            <div class="col-12">
+                                <div class="card bg-dark text-white shadow-sm rounded-4">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-2">
+                                            <i class="fa fa-gift me-2 text-success"></i>
+                                            <a href="{% url 'xmas_lists:event-detail' event.id %}" class="link-light text-decoration-underline-hover">{{ event.event_title }}</a>
+                                        </h4>
+                                        <p class="card-text mb-1"><strong>Date:</strong> {{ event.event_date }}</p>
+                                        {% if event.my_lists %}
+                                            <a href="{% url 'xmas_lists:list-detail' event.my_lists.0.pk %}" class="btn btn-success mt-2 px-4 py-2 fw-bold d-inline-flex align-items-center">
+                                                <i class="fas fa-list me-2"></i>Manage My List
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                         
+                    {% else %}
+                        <h3>You don't have any friends.</h3>
+                    {% endif %}
                 </div>
-                {% endfor %}
-                <h2>Sent Friend Requests</h2>
-                {% for request in sent_friendrequests %}
-                <div class="col-12">
-                    <div class="card bg-dark text-white shadow-sm rounded-4">
-                        <div class="card-body">
-                            <h4 class="card-title mb-2">
-                                <i class="fa fa-user me-2 text-success"></i>
-                                <a href="" class="link-light text-decoration-underline-hover">{{ request.requestee.first_name }}</a>
-                            </h4>
-                            <p class="card-text mb-1"><strong>Requested:</strong> {{ request.created_at }}</p>
-                            <p class="card-text mb-1"><strong>Status:</strong> 
-                            
-                                {% if request.accepted_at %}
-                                    Accepted
-                                {% elif request.rejected_at %}
-                                    Rejected
-                                {% else %}
-                                    <i>Pending</i>
-                                {% endif %}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-                <h2>Recieved Friend Requests</h2>
-                {% for request in recieved_friendrequests %}
-                <div class="col-12">
-                    <div class="card bg-dark text-white shadow-sm rounded-4">
-                        <div class="card-body">
-                            <h4 class="card-title mb-2">
-                                <i class="fa fa-user me-2 text-success"></i>
-                                <a href="" class="link-light text-decoration-underline-hover">{{ request.requestor.first_name }}</a>
-                            </h4>
-                            <p class="card-text mb-1"><strong>Requested:</strong> {{ request.created_at }}</p>
-                            <p class="card-text mb-1"><strong>Status:</strong> 
-                            
-                                {% if request.accepted_at %}
-                                    Accepted
-                                {% elif request.rejected_at %}
-                                    Rejected
-                                {% else %}
-                                    <i>Pending</i>
-                                {% endif %}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
             </div>
-        {% else %}
-            <h3 class="text-center mt-4">You don't have any friends.</h3>
-        {% endif %}
 
-        <a href="{% url 'xmas_lists:friend-request-create' %}" class="btn btn-success mt-4 px-4 py-2 fw-bold d-inline-flex align-items-center mb-5">
+            <div id="recieved-section">
+                <div class="row g-4">
+                    <h3>Recieved Friend Requests</h3>
+                    {% if recieved_friendrequests %}
+                        <hr>
+                        {% for friend in recieved_friendrequests %}
+                            <div class="col-12">
+                                <div class="card bg-dark text-white shadow-sm rounded-4">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-2">
+                                            <i class="fa fa-user me-2 text-success"></i>
+                                            <a href="" class="link-light text-decoration-underline-hover">{{ friend.requestor.first_name }}</a>
+                                        </h4>
+                                        <p class="card-text mb-1"><strong>Recieved:</strong> {{ friend.created_at }}</p>
+                                        <p class="card-text mb-1"><strong>Status:</strong>
+                                            {% if friend.accepted_at %}
+                                                Accepted
+                                            {% elif friend.rejected_at %}
+                                                Rejected
+                                            {% else %}
+                                                <i>Pending</i>
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                    {% else %}
+                        <h3>You don't have any friend requests.</h3>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div id="sent-section">
+                <div class="row g-4">
+                    <h3>Sent Friend Requests</h3>
+                    {% if sent_friendrequests %}
+                            <hr>
+                            {% for request in sent_friendrequests %}
+                                <div class="col-12">
+                                    <div class="card bg-dark text-white shadow-sm rounded-4">
+                                        <div class="card-body">
+                                            <h4 class="card-title mb-2">
+                                                <i class="fa fa-gift me-2 text-success"></i>
+                                                <a href="" class="link-light text-decoration-underline-hover">{{ request.requestee.first_name }}</a>
+                                            </h4>
+                                            <p class="card-text mb-1"><strong>Sent:</strong> {{ request.created_at }}</p>
+                                            <p class="card-text mb-1"><strong>Status:</strong>
+                                                {% if request.accepted_at %}
+                                                    Accepted
+                                                {% elif request.rejected_at %}
+                                                    Rejected
+                                                {% else %}
+                                                    <i>Pending</i>
+                                                {% endif %}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                    {% else %}
+                        <h3>You don't have any sent requests.</h3>
+                    {% endif %}
+                </div>
+            </div>
+
+
+        <a href="{% url 'xmas_lists:friend-request-create'%}" class="btn btn-success mt-4 px-4 py-2 fw-bold d-inline-flex align-items-center mb-5">
             <i class="fas fa-plus me-2"></i>Send Friend Request
         </a>
 
     </div>
 </div>
 {% endblock feature %}
+
+{% block friends_nav %}
+    <ul class="list-unstyled ms-4">
+        <li>
+            <button class="list-group-item list-group-item-action bg-transparent fw-bold" onclick="showSection('friend')">
+            <i class="fa fa-user me-2"></i>Friends</button>
+        </li>
+        <li>
+            <button class="list-group-item list-group-item-action bg-transparent fw-bold" onclick="showSection('recieved')">
+            <i class="fa fa-inbox me-2"></i>Recieved Requests
+                {% if friend_requests %}<span class="badge rounded-pill bg-danger ms-2">{{ friend_requests|length }}</span>{% endif %}
+            </button>
+        </li>
+        <li>
+            <button class="list-group-item list-group-item-action bg-transparent fw-bold" onclick="showSection('sent')">
+            <i class="fa fa-share me-2"></i>Sent Reqeusts</button>
+        </li>
+    </ul>
+
+    <script>
+        function showSection(section) {
+            $('#friend-section').toggle(section === 'friend');
+            $('#recieved-section').toggle(section === 'recieved');
+            $('#sent-section').toggle(section === 'sent');
+        }
+
+        $(document).ready(function() {
+            $('#friend-section').show();
+            $('#recieved-section').hide();
+            $('#sent-section').hide();
+        })
+
+    </script>
+{% endblock friends_nav %}
+
+{% block mobile_friends_nav %}
+    <ul class="list-unstyled ms-4">
+        <li>
+            <button class="list-group-item list-group-item-action bg-transparent fw-bold" onclick="showSection('attending')" data-bs-dismiss="offcanvas">
+            <i class="fa fa-user me-2"></i>Friends</button>
+        </li>
+        <li>
+            <button class="list-group-item list-group-item-action bg-transparent fw-bold" onclick="showSection('own')" data-bs-dismiss="offcanvas">
+            <i class="fa fa-inbox me-2"></i>Recieved Requests
+                {% if friend_requests %}<span class="badge rounded-pill bg-danger ms-2">{{ friend_requests|length }}</span>{% endif %}
+            </button>
+        </li>
+        <li>
+            <button class="list-group-item list-group-item-action bg-transparent fw-bold" onclick="showSection('admin')" data-bs-dismiss="offcanvas">
+            <i class="fa fa-share me-2"></i>Sent Reqeusts</button>
+        </li>
+    </ul>
+{% endblock mobile_friends_nav %}

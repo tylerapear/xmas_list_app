@@ -1,4 +1,4 @@
-from xmas_lists.models import EventInvite
+from xmas_lists.models import *
 
 def pending_invites(request):
     if request.user.is_authenticated:
@@ -7,5 +7,16 @@ def pending_invites(request):
             accepted_at__isnull=True,
             rejected_at__isnull=True
         )
-        return {'pending_invites': pending_invites}
-    return {'pending_invites': []}
+        friend_requests = FriendRequest.objects.filter(
+            requestee=request.user,
+            accepted_at__isnull=True,
+            rejected_at__isnull=True
+        )
+        return {
+            'pending_invites': pending_invites,
+            'friend_requests': friend_requests
+        }
+    return {
+        'pending_invites': [],
+        'friend_requests': []
+    }
