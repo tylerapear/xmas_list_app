@@ -87,6 +87,25 @@ class EventCreateView(LoginRequiredMixin, generic.CreateView):
     model = Event
     form_class = EventCreateForm
     
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        user = self.request.user
+        
+        friend_requests = FriendRequest.objects.filter(
+            Q(requestee=user) | Q(requestor=user),
+            accepted_at__isnull = False
+        ).distinct()
+        
+        requestor_ids = friend_requests.values_list('requestor', flat=True)
+        requestee_ids = friend_requests.values_list('requestee', flat=True)
+        
+        friends = User.objects.filter(
+            Q(pk__in=requestor_ids) | Q(pk__in=requestee_ids) | Q(pk=user.pk)
+        )
+        
+        kwargs['user_queryset'] = friends
+        return kwargs
+    
     def form_valid(self, form):
         
         # Set Event Owner
@@ -347,6 +366,9 @@ class FriendRequestCreateView(LoginRequiredMixin, generic.CreateView):
         response = super().form_valid(form)
         assign_perm('change_friendrequest', self.object.requestee, self.object)
         assign_perm('change_friendrequest', self.object.requestor, self.object)
+        
+        send_friend_request_email(self.request, self.object)
+        
         return response
     
 class FriendRequestListView(LoginRequiredMixin, generic.ListView):
@@ -400,6 +422,23 @@ def send_invite_email(request, event_invite):
         message = "Unable to render message",
         from_email = settings.DEFAULT_FROM_EMAIL,
         recipient_list = [event_invite.user.email],
-        fail_silently = False,
+        fail_silently = True,
         html_message = html_message,
+    )
+    
+def send_friend_request_email(request, friend_request):
+    
+    friend_request_url = request.build_absolute_uri(reverse('xmas_lists:friend-request-list'))
+    html_message = render_to_string('emails/friendrequest.html', {
+        'friend_request': friend_request,
+        'friend_request_url': friend_request_url
+    })
+    
+    send_mail(
+        subject = "Friend Request",
+        message = "Unable to render message",
+        from_email = settings.DEFAULT_FROM_EMAIL,
+        recipient_list = [friend_request.requestee.email],
+        fail_silently = True,
+        html_message = html_message
     )

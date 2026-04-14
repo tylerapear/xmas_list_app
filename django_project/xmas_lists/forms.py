@@ -22,6 +22,12 @@ class EventCreateForm(forms.ModelForm):
         model = Event
         fields = ['event_title', 'event_date', 'invited_users', 'event_admins']
         
+    def __init__(self, *args, user_queryset=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if user_queryset is not None:
+            self.fields['invited_users'].queryset = user_queryset
+            self.fields['event_admins'].queryset = user_queryset
+        
 class EventInviteResponseForm(forms.ModelForm):
     
     RESPONSE_CHOICES = [
