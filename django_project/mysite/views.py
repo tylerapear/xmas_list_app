@@ -12,6 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from django.utils.decorators import method_decorator
+from mysite.utils import generate_unique_username
 
 from xmas_lists.models import User
 
@@ -42,9 +43,9 @@ def auth_receiver(request):
     last_name = user_data.get('family_name', '')
     
     user, created = User.objects.get_or_create(
-        username = email,
+        email = email,
         defaults={
-            "email": email,
+            "username": generate_unique_username(),
             "first_name": first_name,
             "last_name": last_name
         }
