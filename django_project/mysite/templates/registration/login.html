@@ -53,10 +53,15 @@
                                 data-client_id="189858445257-11gob175hraap4qv80pi70ounndi5ndi.apps.googleusercontent.com"
                                 data-context="signin"
                                 data-ux_mode="popup"
-                                data-login_uri="http://localhost:8000/auth-receiver"
                                 data-auto_select="true"
                                 data-itp_support="true">
                             </div>
+                            <script>
+                            document.getElementById('g_id_onload').setAttribute(
+                                'data-login_uri',
+                                window.location.origin + '/auth-receiver'
+                            );
+                            </script>
 
                             <div class="g_id_signin"
                                 data-type="standard"
