@@ -21,6 +21,9 @@ class EventCreateForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = ['event_title', 'event_date', 'invited_users', 'event_admins']
+        widgets = {
+            'event_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+        }
         
     def __init__(self, *args, user_queryset=None, **kwargs):
         super().__init__(*args, **kwargs)
