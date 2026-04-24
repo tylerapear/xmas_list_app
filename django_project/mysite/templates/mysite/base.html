@@ -34,7 +34,7 @@
                     <span class="d-flex align-items-center justify-content-center rounded-circle bg-secondary bg-opacity-25 me-3" style="width:2.2rem; height:2.2rem;">
                         <i class="fa fa-user text-secondary"></i>
                     </span>
-                    <div>
+                    <div class="d-none d-sm-block">
                         <span class="d-flex flex-column align-items-start justify-content-center mx-2 pe-4" style="min-width: 80px;">
                             <span style="font-size: 11px;"><i>Username:</i></span>
                             <span style="font-size: 15px;">{{ user.username }}</span>
@@ -63,6 +63,14 @@
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
+            {% if user.is_authenticated %}
+                <div class="mb-3 d-flex align-items-center">
+                    <span class="d-flex align-items-center justify-content-center rounded-circle bg-secondary bg-opacity-25 me-2" style="width:2rem; height:2rem;">
+                        <i class="fa fa-user text-secondary"></i>
+                    </span>
+                    <span style="font-size: 15px; word-break: break-all;">{{ user.username }}</span>
+                </div>
+            {% endif %}
             <ul class="list-group list-group-flush">
                 <li class="list-group-item bg-transparent border-0 p-0">
                     <a class="list-group-item list-group-item-action bg-transparent fw-bold" href="{% url 'xmas_lists:event-list' %}">
