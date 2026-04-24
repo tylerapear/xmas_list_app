@@ -62,10 +62,13 @@ def auth_receiver(request):
         
 def signup(request):
     
-    first_name, username, password = request.POST["first-name"], request.POST["email"], request.POST["password"]
+    first_name = request.POST["first-name"]
+    username = generate_unique_username() 
+    password = request.POST["password"]
+    email = request.POST["email"]
     
     try:
-        user = User.objects.create_user(first_name=first_name, username=username, email=username, password=password)
+        user = User.objects.create_user(first_name=first_name, username=username, email=email, password=password)
     except IntegrityError:
         messages.error(request, "A user with this email already exists")
         return HttpResponseRedirect(reverse("login"))
