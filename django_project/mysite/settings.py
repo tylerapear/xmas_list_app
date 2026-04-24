@@ -46,7 +46,7 @@ DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 ALLOWED_HOSTS = ast.literal_eval(os.environ.get("DJANGO_ALLOWED_HOSTS", "[]"))
 
-#CSRF_TRUSTED_ORIGINS = ast.literal_eval(os.environ.get("CSRF_TRUSTED_ORIGINS", "[]"))
+CSRF_TRUSTED_ORIGINS = ast.literal_eval(os.environ.get("CSRF_TRUSTED_ORIGINS", "[]"))
 
 
 # Application definition
